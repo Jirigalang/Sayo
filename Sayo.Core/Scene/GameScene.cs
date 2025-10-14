@@ -8,7 +8,6 @@ namespace Sayo.Core.Scene
 {
     internal class GameScene : SceneBase
     {
-        SpriteBatch _sb;
         private Grid _grid;
         private SayoPlayer _sayo;
         public Food Food;
@@ -16,9 +15,10 @@ namespace Sayo.Core.Scene
         private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.25);
         private Keys lastKey = Keys.None;
         public static bool GameRunning = true;
-        public override void Load(SpriteBatch sb, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+
+        public override void Load(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
         {
-            _sb = sb;
+            _sb = new(graphicsDevice);
             var head = content.Load<Texture2D>("SayoHead");
             var head_eatting = content.Load<Texture2D>("SayoHead_Eating");
             var body = content.Load<Texture2D>("SayoBody");
@@ -31,12 +31,12 @@ namespace Sayo.Core.Scene
             var food = content.Load<Texture2D>("Food");
             var tile = content.Load<Texture2D>("Tile");
             _grid = new Grid();
-            _grid.Initialize(graphicsDeviceManager, sb, tile);
+            _grid.Initialize(graphicsDeviceManager, _sb, tile);
             _sayo = new SayoPlayer(heads, bodys, butt, _grid);
             Food = new Food(food);
             Food.Update(_grid);
         }
-        public override void Draw()
+        public override void Draw(GameTime gameTime)
         {
             _sb.Begin();
             _grid.Draw(_sb);
@@ -76,7 +76,7 @@ namespace Sayo.Core.Scene
         }
         public override void Unload(ContentManager content)
         {
-            //TODO;
+            _sb.Dispose();
         }
     }
 }

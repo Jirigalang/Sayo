@@ -7,9 +7,11 @@ namespace Sayo.Core.Scene
 {
     public abstract class SceneBase
     {
-        abstract public void Load(SpriteBatch sb, ContentManager content, GraphicsDeviceManager GraphicsDeviceManager);
+        public SpriteBatch _sb;
+
+        abstract public void Load(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager);
         abstract public void Update(GameTime gameTime);
-        abstract public void Draw();
+        abstract public void Draw(GameTime gameTime);
         abstract public void Unload(ContentManager content);
     }
 }

@@ -18,8 +18,7 @@ namespace Sayo.Core
     {
         // Resources for drawing.
         private readonly GraphicsDeviceManager graphicsDeviceManager;
-        private SpriteBatch _sb;
-
+        public SceneBase CurrentScene;
         /// <summary>
         /// Initializes a new instance of the game. Configures platform-specific settings, 
         /// initializes services like settings and leaderboard managers, and sets up the 
@@ -69,8 +68,9 @@ namespace Sayo.Core
         protected override void LoadContent()
         {
             base.LoadContent();
-            _sb = new SpriteBatch(GraphicsDevice);
-            GameScene gameScene = new GameScene();
+            SceneManager.Initialize(this);
+            CurrentScene = new StartMenuScene();
+            CurrentScene.Load(GraphicsDevice, Content, graphicsDeviceManager);
         }
 
 
@@ -84,7 +84,7 @@ namespace Sayo.Core
         /// </param>
         protected override void Update(GameTime gameTime)
         {
-
+            CurrentScene.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -103,9 +103,16 @@ namespace Sayo.Core
             // Clears the screen with the MonoGame orange color before drawing.
             GraphicsDevice.Clear(Color.MonoGameOrange);
 
-
+            CurrentScene.Draw(gameTime);
 
             base.Draw(gameTime);
+        }
+
+        public void ChangeScene(SceneBase scene)
+        {
+            CurrentScene.Unload(Content);
+            CurrentScene = scene;
+            CurrentScene.Load(GraphicsDevice, Content, graphicsDeviceManager);
         }
     }
 }

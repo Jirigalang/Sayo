@@ -6,11 +6,11 @@ namespace Sayo.Core.Scene
 {
     internal class GameOverScene : SceneBase
     {
-        public override void Load(SpriteBatch sb, ContentManager content, GraphicsDeviceManager GraphicsDeviceManager)
+        public override void Load(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager GraphicsDeviceManager)
         {
             //TODO;
         }
-        public override void Draw()
+        public override void Draw(GameTime gameTime)
         {
             //TODO;
         }
@@ -20,7 +20,7 @@ namespace Sayo.Core.Scene
         }
         public override void Unload(ContentManager content)
         {
-            //TODO;
+            _sb.Dispose();
         }
     }
 }
