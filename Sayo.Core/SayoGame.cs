@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Xna.Framework.Input;
 using Sayo.Core.Content.obj;
+using Sayo.Core.Scene;
 
 namespace Sayo.Core
 {
@@ -17,7 +18,7 @@ namespace Sayo.Core
     {
         // Resources for drawing.
         private readonly GraphicsDeviceManager graphicsDeviceManager;
-        SpriteBatch _sb;
+        private SpriteBatch _sb;
 
         /// <summary>
         /// Initializes a new instance of the game. Configures platform-specific settings, 
@@ -61,9 +62,7 @@ namespace Sayo.Core
             LocalizationManager.SetCulture(selectedLanguage);
         }
 
-        private SayoPlayer _sayo;
-        private Grid _grid;
-        public static Food Food;
+        
         /// <summary>
         /// Loads game content, such as textures and particle systems.
         /// </summary>
@@ -71,28 +70,10 @@ namespace Sayo.Core
         {
             base.LoadContent();
             _sb = new SpriteBatch(GraphicsDevice);
-
-            var head = Content.Load<Texture2D>("SayoHead");
-            var head_eatting = Content.Load<Texture2D>("SayoHead_Eating");
-            var body = Content.Load<Texture2D>("SayoBody");
-            var body_full = Content.Load<Texture2D>("SayoBody_Full");
-            var body_turn = Content.Load<Texture2D>("SayoBody_Turn");
-            var body_turn_full = Content.Load<Texture2D>("SayoBody_Turn_Full");
-            var bodys = new [] { body, body_full, body_turn, body_turn_full };
-            var heads = new [] { head, head_eatting };
-            var butt = Content.Load<Texture2D>("SayoButt");
-            var food = Content.Load<Texture2D>("Food");
-
-            _grid = new Grid();
-            _sayo = new SayoPlayer(heads,bodys,butt,_grid);
-            Food = new Food(food);
-            Food.Update(_grid);
+            GameScene gameScene = new GameScene();
         }
 
-        private TimeSpan _moveTimer = TimeSpan.Zero;
-        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.25);
-        private Keys lastKey = Keys.None;
-        public static bool GameRunning = true;
+
 
         /// <summary>
         /// Updates the game's logic, called once per frame.
@@ -103,41 +84,12 @@ namespace Sayo.Core
         /// </param>
         protected override void Update(GameTime gameTime)
         {
-            float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            _moveTimer += gameTime.ElapsedGameTime;
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                lastKey = Keys.Up;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                lastKey = Keys.Down;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                lastKey = Keys.Right;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                lastKey = Keys.Left;
-            }
 
-            if (_moveTimer < _moveInterval) return;
-
-
-            _moveTimer = TimeSpan.Zero;
-            if (GameRunning)
-            {
-                _sayo.Update(lastKey, _grid);
-            }
-
-            lastKey = Keys.None;
             base.Update(gameTime);
         }
 
         public static void GameOver()
         {
-            GameRunning = false;
             //TODO;
         }
         /// <summary>
@@ -151,9 +103,7 @@ namespace Sayo.Core
             // Clears the screen with the MonoGame orange color before drawing.
             GraphicsDevice.Clear(Color.MonoGameOrange);
 
-            _sb.Begin();
-            _grid.Draw(_sb);
-            _sb.End();
+
 
             base.Draw(gameTime);
         }
