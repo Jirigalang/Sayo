@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Sayo.Core.Content.obj;
 using Microsoft.Xna.Framework;
 namespace Sayo.Core.Scene
 {
-    internal class SettingScene : SceneBase
+    internal class SettingScene(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        : SceneBase(graphicsDevice, content, graphicsDeviceManager)
     {
-        public override void Load(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager GraphicsDeviceManager)
+        public override void Load()
         {
             //TODO;
         }
@@ -18,9 +18,9 @@ namespace Sayo.Core.Scene
         {
             //TODO;
         }
-        public override void Unload(ContentManager content)
+        public override void Unload()
         {
-            _sb.Dispose();
+            SB.Dispose();
         }
     }
 }

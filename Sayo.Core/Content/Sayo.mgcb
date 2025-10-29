@@ -18,12 +18,13 @@
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
+/processorParam:Smoothing=Normal
 /build:Fonts/Hud.spritefont
 
 #begin Food.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyColor=255, 0, 255, 255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -35,7 +36,7 @@
 #begin Sayo.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyColor=255, 0, 255, 255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -47,7 +48,7 @@
 #begin SayoBody.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyColor=255, 0, 255, 255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -59,7 +60,7 @@
 #begin SayoButt.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyColor=255, 0, 255, 255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -71,7 +72,7 @@
 #begin SayoHead.png
 /importer:TextureImporter
 /processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyColor=255, 0, 255, 255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -79,4 +80,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SayoHead.png
+
+#begin SayoTitle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255, 0, 255, 255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SayoTitle.png
 

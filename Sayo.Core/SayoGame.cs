@@ -1,12 +1,13 @@
+using Gum.Forms;
+using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGameGum;
 using Sayo.Core.Localization;
-using System;
+using Sayo.Core.Scene;
 using System.Collections.Generic;
 using System.Globalization;
-using Microsoft.Xna.Framework.Input;
-using Sayo.Core.Content.obj;
-using Sayo.Core.Scene;
+using System.Linq;
 
 namespace Sayo.Core
 {
@@ -17,8 +18,7 @@ namespace Sayo.Core
     public class SayoGame : Game
     {
         // Resources for drawing.
-        private readonly GraphicsDeviceManager graphicsDeviceManager;
-        public SceneBase CurrentScene;
+        private readonly GraphicsDeviceManager _graphicsDeviceManager;
         /// <summary>
         /// Initializes a new instance of the game. Configures platform-specific settings, 
         /// initializes services like settings and leaderboard managers, and sets up the 
@@ -26,18 +26,18 @@ namespace Sayo.Core
         /// </summary>
         public SayoGame()
         {
-            graphicsDeviceManager = new GraphicsDeviceManager(this);
-            // Share GraphicsDeviceManager as a service.
-            Services.AddService(typeof(GraphicsDeviceManager), graphicsDeviceManager);
+            _graphicsDeviceManager = new GraphicsDeviceManager(this);
+            // Share _graphicsDeviceManager as a service.
+            Services.AddService(typeof(GraphicsDeviceManager), _graphicsDeviceManager);
 
-            graphicsDeviceManager.PreferredBackBufferWidth = 1280;
-            graphicsDeviceManager.PreferredBackBufferHeight = 720;
-            graphicsDeviceManager.ApplyChanges();
+            _graphicsDeviceManager.PreferredBackBufferWidth = 1280;
+            _graphicsDeviceManager.PreferredBackBufferHeight = 720;
+            _graphicsDeviceManager.ApplyChanges();
 
             Content.RootDirectory = "Content";
-
+            
             // Configure screen orientations.
-            graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            _graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         }
         /// <summary>
         /// Initializes the game, including setting up localization and adding the 
@@ -48,43 +48,36 @@ namespace Sayo.Core
             base.Initialize();
 
             // Load supported languages and set the default language.
-            List<CultureInfo> cultures = LocalizationManager.GetSupportedCultures();
-            var languages = new List<CultureInfo>();
-            for (int i = 0; i < cultures.Count; i++)
-            {
-                languages.Add(cultures[i]);
-            }
+            var cultures = LocalizationManager.GetSupportedCultures();
 
             // TODO You should load this from a settings file or similar,
             // based on what the user or operating system selected.
-            var selectedLanguage = LocalizationManager.DEFAULT_CULTURE_CODE;
+            const string selectedLanguage = LocalizationManager.DEFAULT_CULTURE_CODE;
             LocalizationManager.SetCulture(selectedLanguage);
+            IsMouseVisible = true;
         }
 
-        
+
         /// <summary>
         /// Loads game content, such as textures and particle systems.
         /// </summary>
         protected override void LoadContent()
         {
             base.LoadContent();
-            SceneManager.Initialize(this);
-            CurrentScene = new StartMenuScene();
-            CurrentScene.Load(GraphicsDevice, Content, graphicsDeviceManager);
+            InitializeGum();
+            SceneManager.Initialize(GraphicsDevice, Content, _graphicsDeviceManager);
+            SceneManager.CurrentScene = SceneManager.Scenes["MainMenu"];
+            SceneManager.CurrentScene.Load();
         }
-
-
-
         /// <summary>
         /// Updates the game's logic, called once per frame.
-        /// 获取键盘状态,在tick时将最后一次输入传入sayo的update中
         /// </summary>
         /// <param name="gameTime">
         /// Provides a snapshot of timing values used for game updates.
         /// </param>
         protected override void Update(GameTime gameTime)
         {
-            CurrentScene.Update(gameTime);
+            SceneManager.CurrentScene.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -101,18 +94,46 @@ namespace Sayo.Core
         protected override void Draw(GameTime gameTime)
         {
             // Clears the screen with the MonoGame orange color before drawing.
-            GraphicsDevice.Clear(Color.MonoGameOrange);
+            GraphicsDevice.Clear(Color.Tomato);
 
-            CurrentScene.Draw(gameTime);
+            SceneManager.CurrentScene.Draw(gameTime);
 
             base.Draw(gameTime);
         }
 
-        public void ChangeScene(SceneBase scene)
+        private void InitializeGum()
         {
-            CurrentScene.Unload(Content);
-            CurrentScene = scene;
-            CurrentScene.Load(GraphicsDevice, Content, graphicsDeviceManager);
+            // Initialize the Gum service. The second parameter specifies
+            // the version of the default visuals to use. V2 is the latest
+            // version.
+            GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
+
+            // Tell the Gum service which content manager to use.  We will tell it to
+            // use the global content manager from our Core.
+            GumService.Default.ContentLoader!.XnaContentManager = Content;
+
+            // Register keyboard input for UI control.
+            FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
+
+            // Register gamepad input for Ui control.
+            FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
+
+            // Customize the tab reverse UI navigation to also trigger when the keyboard
+            // Up arrow key is pushed.
+            FrameworkElement.TabReverseKeyCombos.Add(
+                new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
+
+            // Customize the tab UI navigation to also trigger when the keyboard
+            // Down arrow key is pushed.
+            FrameworkElement.TabKeyCombos.Add(
+                new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Down });
+
+            // The assets created for the UI were done so at 1/4th the size to keep the size of the
+            // texture atlas small.  So we will set the default canvas size to be 1/4th the size of
+            // the game's resolution then tell gum to zoom in by a factor of 4.
+            GumService.Default.CanvasWidth = GraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
+            GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
+            GumService.Default.Renderer.Camera.Zoom = 4.0f;
         }
     }
 }

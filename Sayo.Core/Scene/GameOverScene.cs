@@ -1,26 +1,28 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Sayo.Core.Content.obj;
-using Microsoft.Xna.Framework;
-namespace Sayo.Core.Scene
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Sayo.Core.Scene;
+internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        : SceneBase(graphicsDevice, content, graphicsDeviceManager)
 {
-    internal class GameOverScene : SceneBase
+    public override void Load()
     {
-        public override void Load(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager GraphicsDeviceManager)
-        {
-            //TODO;
-        }
-        public override void Draw(GameTime gameTime)
-        {
-            //TODO;
-        }
-        public override void Update(GameTime gameTime)
-        {
-            //TODO;
-        }
-        public override void Unload(ContentManager content)
-        {
-            _sb.Dispose();
-        }
+        //TODO;
+    }
+
+    public override void Draw(GameTime gameTime)
+    {
+        //TODO;
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        //TODO;
+    }
+
+    public override void Unload()
+    {
+        SB.Dispose();
     }
 }

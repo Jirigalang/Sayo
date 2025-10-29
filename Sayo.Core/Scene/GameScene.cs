@@ -6,45 +6,48 @@ using Sayo.Core.Content.obj;
 using System;
 namespace Sayo.Core.Scene
 {
-    internal class GameScene : SceneBase
+    internal class GameScene(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        : SceneBase(graphicsDevice, content, graphicsDeviceManager)
     {
         private Grid _grid;
         private SayoPlayer _sayo;
-        public Food Food;
+        private Food _food;
         private TimeSpan _moveTimer = TimeSpan.Zero;
         private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.25);
         private Keys lastKey = Keys.None;
         public static bool GameRunning = true;
 
-        public override void Load(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        public override void Load()
         {
-            _sb = new(graphicsDevice);
-            var head = content.Load<Texture2D>("SayoHead");
-            var head_eatting = content.Load<Texture2D>("SayoHead_Eating");
-            var body = content.Load<Texture2D>("SayoBody");
-            var body_full = content.Load<Texture2D>("SayoBody_Full");
-            var body_turn = content.Load<Texture2D>("SayoBody_Turn");
-            var body_turn_full = content.Load<Texture2D>("SayoBody_Turn_Full");
+            var head = Content.Load<Texture2D>("SayoHead");
+            var head_eatting = Content.Load<Texture2D>("SayoHead_Eating");
+            var body = Content.Load<Texture2D>("SayoBody");
+            var body_full = Content.Load<Texture2D>("SayoBody_Full");
+            var body_turn = Content.Load<Texture2D>("SayoBody_Turn");
+            var body_turn_full = Content.Load<Texture2D>("SayoBody_Turn_Full");
             var bodys = new[] { body, body_full, body_turn, body_turn_full };
             var heads = new[] { head, head_eatting };
-            var butt = content.Load<Texture2D>("SayoButt");
-            var food = content.Load<Texture2D>("Food");
-            var tile = content.Load<Texture2D>("Tile");
+            var butt = Content.Load<Texture2D>("SayoButt");
+            var food = Content.Load<Texture2D>("Food");
+            var tile = Content.Load<Texture2D>("Tile");
             _grid = new Grid();
-            _grid.Initialize(graphicsDeviceManager, _sb, tile);
+            _grid.Initialize(GraphicsDeviceManager, SB, tile);
             _sayo = new SayoPlayer(heads, bodys, butt, _grid);
-            Food = new Food(food);
-            Food.Update(_grid);
+            _food = new Food(food);
+            _food.Update(_grid);
         }
         public override void Draw(GameTime gameTime)
         {
-            _sb.Begin();
-            _grid.Draw(_sb);
-            _sb.End();
+            SB.Begin();
+            _grid.Draw(SB);
+            SB.End();
         }
+        /// <summary>
+        /// 获取键盘状态,在tick时将最后一次输入传入sayo的update中
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _moveTimer += gameTime.ElapsedGameTime;
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
@@ -69,14 +72,14 @@ namespace Sayo.Core.Scene
             _moveTimer = TimeSpan.Zero;
             if (GameRunning)
             {
-                _sayo.Update(lastKey, _grid, Food);
+                _sayo.Update(lastKey, _grid, _food);
             }
 
             lastKey = Keys.None;
         }
-        public override void Unload(ContentManager content)
+        public override void Unload()
         {
-            _sb.Dispose();
+            SB.Dispose();
         }
     }
 }

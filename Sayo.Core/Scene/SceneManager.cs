@@ -1,22 +1,46 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sayo.Core.Scene
 {
     public static class SceneManager
     {
-        private static SayoGame _game;
-        public static void Initialize(SayoGame game)
+        public static SceneBase CurrentScene;
+        private static GraphicsDevice GraphicsDevice;
+        private static ContentManager Content;
+        private static GraphicsDeviceManager GraphicsDeviceManager;
+        public static Dictionary<string, SceneBase> Scenes;
+        public static void Initialize(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
         {
-            _game = game;
+            GraphicsDevice = graphicsDevice;
+            Content = content;
+            GraphicsDeviceManager = graphicsDeviceManager;
+            Scenes = new Dictionary<string, SceneBase>
+            {
+                { "MainMenu", new MainMenuScene(GraphicsDevice, Content, GraphicsDeviceManager) },
+                { "Game", new GameScene(GraphicsDevice, Content, GraphicsDeviceManager) },
+                { "GameOver", new GameOverScene(GraphicsDevice, Content, GraphicsDeviceManager) },
+                { "Credits", new CreditsScene(GraphicsDevice, Content, GraphicsDeviceManager) }
+            };
+
         }
 
-        public static void ChangeScene(SceneBase newScene)
+        public static void ChangeScene(string sceneName)
         {
-            _game.ChangeScene(newScene);
+            if (Scenes.TryGetValue(sceneName, out SceneBase value))
+            {
+                CurrentScene.Unload();
+                CurrentScene = value;
+                CurrentScene.Load();
+            }
+            else
+            {
+                throw new Exception($"Scene '{sceneName}' not found.");
+            }
         }
     }
 }
