@@ -6,7 +6,7 @@ namespace Sayo.Core.Scene
 {
     public abstract class SceneBase(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
     {
-        public SpriteBatch SB = new SpriteBatch(graphicsDevice);
+        public SpriteBatch SB = new(graphicsDevice);
         public GraphicsDevice GraphicsDevice = graphicsDevice;
         public ContentManager Content = content;
         public GraphicsDeviceManager GraphicsDeviceManager = graphicsDeviceManager;

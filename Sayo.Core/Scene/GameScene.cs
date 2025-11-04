@@ -13,7 +13,7 @@ namespace Sayo.Core.Scene
         private SayoPlayer _sayo;
         private Food _food;
         private TimeSpan _moveTimer = TimeSpan.Zero;
-        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.25);
+        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(1);
         private Keys lastKey = Keys.None;
         public static bool GameRunning = true;
 
@@ -38,6 +38,7 @@ namespace Sayo.Core.Scene
         }
         public override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.White);
             SB.Begin();
             _grid.Draw(SB);
             SB.End();

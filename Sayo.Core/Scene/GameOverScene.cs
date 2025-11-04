@@ -13,6 +13,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
 
     public override void Draw(GameTime gameTime)
     {
+        //不调用GraphicsDevice.Clear(),以保留游戏画面作为背景
         //TODO;
     }
 

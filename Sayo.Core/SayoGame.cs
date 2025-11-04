@@ -1,13 +1,15 @@
-using Gum.Forms;
+﻿using Gum.Forms;
 using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGameGum;
 using Sayo.Core.Localization;
 using Sayo.Core.Scene;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace Sayo.Core
 {
@@ -46,11 +48,6 @@ namespace Sayo.Core
         protected override void Initialize()
         {
             base.Initialize();
-
-            // Load supported languages and set the default language.
-            var cultures = LocalizationManager.GetSupportedCultures();
-
-            // TODO You should load this from a settings file or similar,
             // based on what the user or operating system selected.
             const string selectedLanguage = LocalizationManager.DEFAULT_CULTURE_CODE;
             LocalizationManager.SetCulture(selectedLanguage);
@@ -66,8 +63,7 @@ namespace Sayo.Core
             base.LoadContent();
             InitializeGum();
             SceneManager.Initialize(GraphicsDevice, Content, _graphicsDeviceManager);
-            SceneManager.CurrentScene = SceneManager.Scenes["MainMenu"];
-            SceneManager.CurrentScene.Load();
+            SceneManager.ChangeScene("MainMenu");
         }
         /// <summary>
         /// Updates the game's logic, called once per frame.
@@ -93,9 +89,6 @@ namespace Sayo.Core
         /// </param>
         protected override void Draw(GameTime gameTime)
         {
-            // Clears the screen with the MonoGame orange color before drawing.
-            GraphicsDevice.Clear(Color.Tomato);
-
             SceneManager.CurrentScene.Draw(gameTime);
 
             base.Draw(gameTime);

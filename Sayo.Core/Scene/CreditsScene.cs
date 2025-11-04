@@ -16,8 +16,9 @@ namespace Sayo.Core.Scene
         }
         public override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.White);
             SB.Begin();
-            for(int i = 0; i < credits.Length; i++)
+            for (int i = 0; i < credits.Length; i++)
             {
                 SB.DrawString(_font, credits[i], new Vector2(_windowWidth / 2 - _font.MeasureString(credits[i]).X / 2, 100 + i * 40), Color.White);
             }
