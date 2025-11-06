@@ -1,15 +1,9 @@
 ﻿using Gum.Forms;
 using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGameGum;
 using Sayo.Core.Localization;
 using Sayo.Core.Scene;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace Sayo.Core
 {
@@ -77,10 +71,7 @@ namespace Sayo.Core
             base.Update(gameTime);
         }
 
-        public static void GameOver()
-        {
-            //TODO;
-        }
+
         /// <summary>
         /// Draws the game's graphics, called once per frame.
         /// </summary>

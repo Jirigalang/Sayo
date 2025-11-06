@@ -1,15 +1,11 @@
 ﻿using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using MonoGameGum;
 using System;
-using System.Globalization;
 using Gum.Wireframe;
-using Gum.Forms;
 using Gum.Forms.DefaultVisuals;
 
 namespace Sayo.Core.Scene
@@ -33,6 +29,7 @@ namespace Sayo.Core.Scene
         }
         public override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.Tomato);
             if (_titleScreenButtonsPanel.IsVisible)
             {
                 var picSize = title.Bounds.Size.ToVector2();
@@ -77,6 +74,8 @@ namespace Sayo.Core.Scene
             var visual = (ButtonVisual)settingButton.Visual;
             visual.Width = 23;
             visual.Height = 5;
+            var textInstance = visual.TextInstance;
+            textInstance.CustomFontFile = "fonts/04b_30.fnt";
             visual.TextInstance.FontSize = 5;
             visual.TextInstance.FontScale = 0.4f;
             settingButton.Click += SettingButton_Click;

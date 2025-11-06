@@ -13,7 +13,7 @@ namespace Sayo.Core.Scene
         private SayoPlayer _sayo;
         private Food _food;
         private TimeSpan _moveTimer = TimeSpan.Zero;
-        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(1);
+        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.5);
         private Keys lastKey = Keys.None;
         public static bool GameRunning = true;
 
@@ -78,9 +78,11 @@ namespace Sayo.Core.Scene
 
             lastKey = Keys.None;
         }
+
         public override void Unload()
         {
             SB.Dispose();
-        }
+        }        
+
     }
 }

@@ -26,7 +26,6 @@ namespace Sayo.Core.Scene
                 { "Credits", new CreditsScene(GraphicsDevice, Content, GraphicsDeviceManager) },
                 { "Setting", new SettingScene(GraphicsDevice, Content, GraphicsDeviceManager) }
             };
-
         }
 
         public static void ChangeScene(string sceneName)
