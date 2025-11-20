@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Sayo.Core.Content.obj;
+using Sayo.Core.Object;
 using System;
 namespace Sayo.Core.Scene
 {
@@ -19,6 +19,7 @@ namespace Sayo.Core.Scene
 
         public override void Load()
         {
+            GameRunning = true;
             var head = Content.Load<Texture2D>("SayoHead");
             var head_eatting = Content.Load<Texture2D>("SayoHead_Eating");
             var body = Content.Load<Texture2D>("SayoBody");
@@ -36,6 +37,7 @@ namespace Sayo.Core.Scene
             _food = new Food(food);
             _food.Update(_grid);
         }
+
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
@@ -82,7 +84,6 @@ namespace Sayo.Core.Scene
         public override void Unload()
         {
             SB.Dispose();
-        }        
-
+        }
     }
 }

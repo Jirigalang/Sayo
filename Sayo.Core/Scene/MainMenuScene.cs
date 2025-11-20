@@ -60,6 +60,7 @@ namespace Sayo.Core.Scene
             _titleScreenButtonsPanel.Dock(Dock.Fill);
             _titleScreenButtonsPanel.AddToRoot();
 
+            
             var startButton = new Button();
             startButton.Anchor(Anchor.Bottom);
             startButton.Visual.Y = -12;

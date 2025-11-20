@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>D:/OneDrive/repos/Sayo/Sayo.Core/Content/1.wav</SourceFile>
+  <SourceTime>2025-11-04T17:06:44.3967442+08:00</SourceTime>
+  <DestFile>D:/OneDrive/repos/Sayo/Sayo.Core/Content/bin/DesktopGL/Sayo/1.xnb</DestFile>
+  <DestTime>2025-11-04T17:09:14.4791093+08:00</DestTime>
+  <Importer>WavImporter</Importer>
+  <ImporterTime>2025-06-02T18:31:02+08:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2025-06-02T18:31:02+08:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

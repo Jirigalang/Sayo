@@ -42,6 +42,7 @@ namespace Sayo.Core
         protected override void Initialize()
         {
             base.Initialize();
+            
             // based on what the user or operating system selected.
             const string selectedLanguage = LocalizationManager.DEFAULT_CULTURE_CODE;
             LocalizationManager.SetCulture(selectedLanguage);
