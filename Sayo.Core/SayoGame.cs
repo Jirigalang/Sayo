@@ -3,7 +3,6 @@ using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
 using MonoGameGum;
 using Sayo.Core.Localization;
-using Sayo.Core.Scene;
 
 namespace Sayo.Core
 {
@@ -69,6 +68,7 @@ namespace Sayo.Core
         protected override void Update(GameTime gameTime)
         {
             SceneManager.CurrentScene.Update(gameTime);
+            SoundManager.Update(gameTime);
             base.Update(gameTime);
         }
 

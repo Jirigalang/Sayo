@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Sayo.Core.Scene;
 using System;
 using System.Collections.Generic;
 
-namespace Sayo.Core.Scene
+namespace Sayo.Core
 {
     public static class SceneManager
     {

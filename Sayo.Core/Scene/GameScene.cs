@@ -15,6 +15,7 @@ namespace Sayo.Core.Scene
         private TimeSpan _moveTimer = TimeSpan.Zero;
         private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.5);
         private Keys lastKey = Keys.None;
+        private Keys prevKey = Keys.None;
         public static bool GameRunning = true;
 
         public override void Load()
@@ -33,9 +34,9 @@ namespace Sayo.Core.Scene
             var tile = Content.Load<Texture2D>("Tile");
             _grid = new Grid();
             _grid.Initialize(GraphicsDeviceManager, SB, tile);
-            _sayo = new SayoPlayer(heads, bodys, butt, _grid);
             _food = new Food(food);
             _food.Update(_grid);
+            _sayo = new SayoPlayer(heads, bodys, butt, _grid, _food);
         }
 
         public override void Draw(GameTime gameTime)
@@ -52,21 +53,19 @@ namespace Sayo.Core.Scene
         public override void Update(GameTime gameTime)
         {
             _moveTimer += gameTime.ElapsedGameTime;
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            Keys[] directions = { Keys.Up, Keys.Down, Keys.Left, Keys.Right };
+
+            KeyboardState state = Keyboard.GetState();
+
+            foreach (var key in directions)
             {
-                lastKey = Keys.Up;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                lastKey = Keys.Down;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                lastKey = Keys.Right;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                lastKey = Keys.Left;
+                if (state.IsKeyDown(key))
+                {
+                    if (lastKey == Keys.None)
+                        lastKey = key;
+                    else
+                        prevKey = key;
+                }
             }
 
             if (_moveTimer < _moveInterval) return;
@@ -75,10 +74,10 @@ namespace Sayo.Core.Scene
             _moveTimer = TimeSpan.Zero;
             if (GameRunning)
             {
-                _sayo.Update(lastKey, _grid, _food);
+                _sayo.Update(gameTime, lastKey, _grid);
             }
-
-            lastKey = Keys.None;
+            lastKey = prevKey;
+            prevKey = Keys.None;
         }
 
         public override void Unload()

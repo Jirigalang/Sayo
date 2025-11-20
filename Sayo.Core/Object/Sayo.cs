@@ -16,6 +16,7 @@ internal class SayoPlayer
     private readonly SayoBody[] _bodys = new SayoBody[400];
     private readonly SayoButt _butt;
     private Grid _grid;
+    Food _food;
     public static int bodyCount = 1;
 
     public SayoPlayer(Texture2D[] head, Texture2D[] bodyTexture, Texture2D butt, Grid grid)
@@ -57,7 +58,7 @@ internal class SayoPlayer
         grid.Cell[_butt.Status.TargetPosition.X, _butt.Status.TargetPosition.Y] = _butt;
     }
     private ObjType _isAteSomething;
-    public void Update(Keys lastKey, Grid grid, Food food)
+    public void Update(Keys lastKey, Grid grid)
     {
         //先更新位置, 统一更新完后移动
         _head.Update(lastKey);
@@ -112,7 +113,7 @@ internal class SayoPlayer
                 break;
             case ObjType.Food:
                 _head.Status.Ate = true;
-                food.Set(grid);
+                _food.Set(grid);
                 _head.Move(grid);
                 _head.CurrectTexture2D = _head.Head_Eating;
                 var newBody = SayoBody.AddBody(_bodys, _butt.Status,_bodys[bodyCount-1].OldStatus);
@@ -151,8 +152,10 @@ internal class SayoPlayer
                 {
                     throw new Exception("Body位置冲突");
                 }
+                SoundManager.PlayEatSounds();
                 break;
             case ObjType.Edge:
+                SoundManager.ReadyPlaySounds.Add(new ReadyPlaySound("HitWall"));
                 GameOver();
                 break;
         }
