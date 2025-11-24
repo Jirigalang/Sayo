@@ -5,6 +5,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Sayo.Core.Object
 {
+    /// <summary>
+    /// 表示可以放置在网格上随机空位的食物对象。
+    /// </summary>
+    /// <remarks>
+    /// <see cref="Food"/> 类扩展了 <see cref="Sprite"/> 类，用于表示
+    /// 基于网格的环境中的食品。食物的位置是动态管理的，可以更新或设置
+    /// 到网格内的新随机位置。
+    /// </remarks>
     public class Food : Sprite
     {
         private readonly Random Random = new();

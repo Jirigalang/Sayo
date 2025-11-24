@@ -3,13 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Sayo.Core.Scene;
 using System;
-using System.Runtime.InteropServices;
 using static Sayo.Core.Helper;
 
 namespace Sayo.Core.Object;
 
 /// <summary>
-///     游戏中的主角类型,有头身体屁股三种部位,头部负责转向,身体负责显示转向时的不同状态,屁股好像没必要单独分出来一个对象,但是也懒得删了,状态在grid中储存
+/// 游戏中的主角类型,有头身体屁股三种部位,头部负责转向,身体负责显示转向时的不同状态,屁股好像没必要单独分出来一个对象,但是也懒得删了,状态在grid中储存
 /// </summary>
 internal class SayoPlayer
 {
@@ -181,6 +180,9 @@ internal class SayoPlayer
     }
 }
 
+/// <summary>
+/// 头
+/// </summary>
 internal class SayoHead : Sprite
 {
     public Texture2D Head_Eating;
@@ -246,6 +248,9 @@ internal class SayoHead : Sprite
     }
 }
 
+/// <summary>
+/// 身
+/// </summary>
 internal class SayoBody : Sprite
 {
     public static Texture2D BodyTexture;
@@ -310,6 +315,9 @@ internal class SayoBody : Sprite
     }
 }
 
+/// <summary>
+/// 鼙鼓
+/// </summary>
 internal class SayoButt : Sprite
 {
     public SayoButt(Texture2D texture2D) : base(texture2D)

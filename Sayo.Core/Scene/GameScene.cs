@@ -1,7 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Gum.Forms.Controls;
+using Gum.Wireframe;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGameGum;
 using Sayo.Core.Object;
 using System;
 namespace Sayo.Core.Scene
@@ -16,7 +19,11 @@ namespace Sayo.Core.Scene
         private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(1);
         private Keys lastKey = Keys.None;
         private Keys prevKey = Keys.None;
+        private Panel _gamePanel;
+        private Button _retryButton;
         public static bool GameRunning = true;
+
+
 
         public override void Load()
         {
@@ -42,6 +49,7 @@ namespace Sayo.Core.Scene
             _food = new Food(food);
             _food.Update(_grid);
             _sayo = new SayoPlayer(heads, bodys, butt, _grid, _food);
+            CreatePanel();
         }
 
         public override void Draw(GameTime gameTime)
@@ -50,15 +58,16 @@ namespace Sayo.Core.Scene
             SB.Begin();
             _grid.Draw(SB);
             SB.End();
+            GumService.Default.Draw();
         }
 
-        private bool isFirstKey;
         /// <summary>
         /// 获取键盘状态,在tick时将最后一次输入传入sayo的update中
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
+            GumService.Default.Update(gameTime);
             _moveTimer += gameTime.ElapsedGameTime;
             Keys[] directions = [Keys.Up, Keys.Down, Keys.Left, Keys.Right];
 
@@ -67,27 +76,50 @@ namespace Sayo.Core.Scene
             foreach (var key in directions)
             {
                 if (!state.IsKeyDown(key)) continue;
-                if (lastKey == Keys.None || !isFirstKey)
+                if (lastKey == Keys.None)
                     lastKey = key;
                 else
                     prevKey = key;
-                isFirstKey = true;
             }
 
             if (_moveTimer < _moveInterval) return;
-
+            if (lastKey == Keys.None)
+            {
+                lastKey = prevKey;
+                prevKey = Keys.None;
+            }
 
             _moveTimer = TimeSpan.Zero;
             if (GameRunning)
                 _sayo.Update(gameTime, lastKey, _grid);
-            lastKey = prevKey;
-            prevKey = Keys.None;
-            isFirstKey = false;
         }
 
         public override void Unload()
         {
             SB.Dispose();
+        }
+        private void CreatePanel()
+        {
+            GumService.Default.Root.Children.Clear();
+            // Create a container to hold all of our buttons
+            _gamePanel = new Panel();
+            _gamePanel.Dock(Dock.Fill);
+            _gamePanel.AddToRoot();
+
+
+            var pauseButton = Helper.CreateButton(_gamePanel, PauseButton_Click, "||", Anchor.BottomRight, width: 23, height: 5, textscale: 0.4f);
+            _retryButton = Helper.CreateButton(_gamePanel, HandleRetryClicked, "重试", Anchor.Bottom, width: 70);
+            _retryButton.IsVisible = false;
+        }
+
+        private void PauseButton_Click(object sender, EventArgs e)
+        {
+            GameRunning = !GameRunning;
+            _retryButton.IsVisible = !GameRunning;
+        }
+        private void HandleRetryClicked(object sender, EventArgs e)
+        {
+            SceneManager.ChangeScene("Game");
         }
     }
 }

@@ -61,9 +61,7 @@ namespace Sayo.Core.Scene
 
             var startButton = Helper.CreateButton(_titleScreenButtonsPanel, HandleStartClicked, "开始", Anchor.Bottom, horizontalOffect: -12, width: 70);
             var settingButton = Helper.CreateButton(_titleScreenButtonsPanel, SettingButton_Click, "设置", Anchor.BottomRight, width: 23, height: 5, textscale: 0.4f);
-
-            var creditsButton = new Button();
-            var creditsButtton = Helper.CreateButton(_titleScreenButtonsPanel, CreditsButton_Click, "制作人员名单", Anchor.BottomRight,
+            var creditsButton = Helper.CreateButton(_titleScreenButtonsPanel, CreditsButton_Click, "制作人员名单", Anchor.BottomRight,
                 width: 23, height: 5, textscale: 0.4f, horizontalOffect: -0, longitudinalOffset: -20);
 
             startButton.IsFocused = true;

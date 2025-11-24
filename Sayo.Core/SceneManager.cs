@@ -13,6 +13,7 @@ namespace Sayo.Core
         private static ContentManager Content;
         private static GraphicsDeviceManager GraphicsDeviceManager;
         private static Dictionary<string, SceneBase> _scenes;
+        private static SceneBase _sceneBuffer;
         public static SceneBase CurrentScene { get; set; }
         public static void Initialize(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
         {
@@ -41,6 +42,26 @@ namespace Sayo.Core
             {
                 throw new Exception($"Scene '{sceneName}' not found.");
             }
+        }
+        public static void AddSubScene(string sceneName)
+        {
+            if (_scenes.TryGetValue(sceneName, out SceneBase value))
+            {
+                _sceneBuffer = CurrentScene;
+                CurrentScene = value;
+                CurrentScene.Load();
+            }
+            else
+            {
+                throw new Exception($"Scene '{sceneName}' not found.");
+            }
+        }
+
+        public static void RemoveSubScene()
+        {
+            CurrentScene.Unload();
+            CurrentScene = _sceneBuffer;
+            _sceneBuffer = null;
         }
     }
 }

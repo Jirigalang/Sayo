@@ -5,8 +5,13 @@ using System;
 namespace Sayo.Core.Object
 {
     /// <summary>
-    /// 
+    /// 表示用于管理和渲染精灵的二维网格结构。
     /// </summary>
+    /// <remarks>
+    /// <see cref="Grid"/> 类提供了初始化、操作和呈现
+    /// 精灵网格。它支持在特定位置设置精灵、在精灵之间移动精灵等操作
+    /// 并将网格渲染到目标。网格尺寸和单元格大小是可配置的。
+    /// </remarks>
     public class Grid
     {
         private const int _row = 20;
