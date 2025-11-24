@@ -57,6 +57,7 @@ namespace Sayo.Core
             base.LoadContent();
             InitializeGum();
             SceneManager.Initialize(GraphicsDevice, Content, _graphicsDeviceManager);
+            SoundManager.Initialize(Content);
             SceneManager.ChangeScene("MainMenu");
         }
         /// <summary>

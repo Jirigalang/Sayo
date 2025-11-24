@@ -20,6 +20,21 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Hud.spritefont
 
+#begin Fonts/SayoFont_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/SayoFont_0.png
+
+#begin Fonts/SayoFont.fnt
+/copy:Fonts/SayoFont.fnt
+
 #begin Food.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -127,6 +142,72 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SayoTitle.png
+
+#begin Sound/click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/click.wav
+
+#begin Sound/crunch1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/crunch1.wav
+
+#begin Sound/crunch2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/crunch2.wav
+
+#begin Sound/crunch3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/crunch3.wav
+
+#begin Sound/crunch4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/crunch4.wav
+
+#begin Sound/crunch5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/crunch5.wav
+
+#begin Sound/crunch6.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/crunch6.wav
+
+#begin Sound/crunch7.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/crunch7.wav
+
+#begin Sound/opening.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/opening.wav
+
+#begin Sound/Sayo_gua.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Sayo_gua.wav
+
+#begin Sound/Sayo_hurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Sayo_hurt.wav
 
 #begin Tile.png
 /importer:TextureImporter

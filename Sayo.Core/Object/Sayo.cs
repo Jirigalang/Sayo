@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Sayo.Core.Scene;
 using System;
+using System.Runtime.InteropServices;
 using static Sayo.Core.Helper;
 
 namespace Sayo.Core.Object;
@@ -15,15 +16,17 @@ internal class SayoPlayer
     private readonly SayoHead _head;
     private readonly SayoBody[] _bodys = new SayoBody[400];
     private readonly SayoButt _butt;
-    private Grid _grid;
-    Food _food;
+    private readonly Grid _grid;
+    private readonly Food _food;
     public static int bodyCount = 1;
+    
 
-    public SayoPlayer(Texture2D[] head, Texture2D[] bodyTexture, Texture2D butt, Grid grid)
+    public SayoPlayer(Texture2D[] head, Texture2D[] bodyTexture, Texture2D butt, Grid grid, Food food)
     {
+        Score = 0;
         _grid = grid;
         _head = new SayoHead(head[0], head[1]);
-
+        _food = food;
         SayoBody.BodyTexture = bodyTexture[0];
         SayoBody.FullBody = bodyTexture[1];
         SayoBody.TurnedBody = bodyTexture[2];
@@ -58,7 +61,7 @@ internal class SayoPlayer
         grid.Cell[_butt.Status.TargetPosition.X, _butt.Status.TargetPosition.Y] = _butt;
     }
     private ObjType _isAteSomething;
-    public void Update(Keys lastKey, Grid grid)
+    public void Update(GameTime gameTime, Keys lastKey, Grid grid)
     {
         //先更新位置, 统一更新完后移动
         _head.Update(lastKey);
@@ -116,19 +119,19 @@ internal class SayoPlayer
                 _food.Set(grid);
                 _head.Move(grid);
                 _head.CurrectTexture2D = _head.Head_Eating;
-                var newBody = SayoBody.AddBody(_bodys, _butt.Status,_bodys[bodyCount-1].OldStatus);
+                var newBody = SayoBody.AddBody(_bodys, _butt.Status, _bodys[bodyCount - 1].OldStatus);
                 if (newBody.Status.Turn != Turn.NoTurn)
                 {
                     _butt.Status.Rotation = newBody.Status.Turn switch
                     {
                         Turn.上右 => 不旋转,
-                        Turn.左下 => 不旋转,
-                        Turn.右下 => 旋转90度,
-                        Turn.上左 => 旋转90度,
-                        Turn.下左 => 旋转180度,
-                        Turn.右上 => 旋转180度,
-                        Turn.下右 => 旋转270度,
+                        Turn.上左 => 不旋转,
+                        Turn.左下 => 旋转270度,
                         Turn.左上 => 旋转270度,
+                        Turn.右下 => 旋转90度,
+                        Turn.右上 => 旋转90度,
+                        Turn.下左 => 旋转180度,
+                        Turn.下右 => 旋转180度,
                         _ => 114514
                     };
                 }
@@ -153,9 +156,9 @@ internal class SayoPlayer
                     throw new Exception("Body位置冲突");
                 }
                 SoundManager.PlayEatSounds();
+                Score++;
                 break;
             case ObjType.Edge:
-                SoundManager.ReadyPlaySounds.Add(new ReadyPlaySound("HitWall"));
                 GameOver();
                 break;
         }
@@ -171,6 +174,8 @@ internal class SayoPlayer
     }
     public static void GameOver()
     {
+        SoundManager.SEList[SEName.Sayo_gua].Play();
+        SoundManager.PlayInSeconds(SEName.Sayo_hurt, 2);
         GameScene.GameRunning = false;
         SceneManager.ChangeScene("GameOver");
     }
@@ -273,7 +278,7 @@ internal class SayoBody : Sprite
                 _ => Status.Rotation
             };
         }
-            bool ate = Status.Ate;
+        bool ate = Status.Ate;
         bool turned = Status.Turn != Turn.NoTurn;
 
         CurrectTexture2D =
@@ -286,17 +291,17 @@ internal class SayoBody : Sprite
             };
     }
 
-    public static SayoBody AddBody(SayoBody[] bodys, SegmentStatus status,SegmentStatus lastBodyStatus)
+    public static SayoBody AddBody(SayoBody[] bodys, SegmentStatus status, SegmentStatus oldStatusOfLastBody)
     {
         var body = new SayoBody(BodyTexture)
         {
-            Status = lastBodyStatus
+            Status = oldStatusOfLastBody
         };
         body.Status.TargetPosition = status.TargetPosition;
 
         bodys[SayoPlayer.bodyCount] = body;
         body.OldStatus = status;
-        if(body.Status.Turn != Turn.NoTurn)
+        if (body.Status.Turn != Turn.NoTurn)
         {
             body.CurrectTexture2D = TurnedBody;
         }
@@ -317,7 +322,7 @@ internal class SayoButt : Sprite
     {
         OldStatus = Status;
         Status = body.OldStatus;
-        if(Status.Turn != Turn.NoTurn)
+        if (Status.Turn != Turn.NoTurn)
         {
             Status.Rotation = Status.Turn switch
             {

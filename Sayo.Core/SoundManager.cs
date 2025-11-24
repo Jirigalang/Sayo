@@ -10,18 +10,17 @@ namespace Sayo.Core
     {
         public static readonly Dictionary<SEName, SoundEffectInstance> SEList = [];
         public static readonly List<ReadyPlaySound> ReadyPlaySounds = [];
-        private static readonly SoundEffectInstance[] _eatSounds = new SoundEffectInstance[6];
-        private static readonly RandomBag _randomBag = new(6);
+        private static readonly SoundEffectInstance[] _eatSounds = new SoundEffectInstance[7];
+        private static readonly RandomBag _randomBag = new(7);
         private static GameTime _gameTime;
 
         public static void Initialize(ContentManager content)
         {
-            SEList[SEName.GameOver] = content.Load<SoundEffect>("Sound/gameover").CreateInstance();
             SEList[SEName.Click] = content.Load<SoundEffect>("Sound/click").CreateInstance();
             SEList[SEName.Opening] = content.Load<SoundEffect>("Sound/opening").CreateInstance();
-            SEList[SEName.Sayo_itai] = content.Load<SoundEffect>("Sound/Sayo_itai").CreateInstance();
+            SEList[SEName.Sayo_gua] = content.Load<SoundEffect>("Sound/Sayo_gua").CreateInstance();
             SEList[SEName.Sayo_hurt] = content.Load<SoundEffect>("Sound/Sayo_hurt").CreateInstance();
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 7; i++)
             {
                 _eatSounds[i] = content.Load<SoundEffect>($"Sound/crunch{i + 1}").CreateInstance();
             }
@@ -29,16 +28,20 @@ namespace Sayo.Core
         public static void Update(GameTime gameTime)
         {
             _gameTime = gameTime;
-            foreach (ReadyPlaySound sound in ReadyPlaySounds)
+            for (int i = ReadyPlaySounds.Count - 1; i >= 0; i--)
             {
-                if(gameTime.TotalGameTime >= sound.BeginTime + sound.DelayTime)
+                var sound = ReadyPlaySounds[i];
+
+                if (gameTime.TotalGameTime >= sound.BeginTime + sound.DelayTime)
                 {
-                    sound.Sound.Play();
-                    ReadyPlaySounds.Remove(sound);
+                    if (sound.Sound.State != SoundState.Playing)
+                        sound.Sound.Play();
+
+                    ReadyPlaySounds.RemoveAt(i);
                 }
             }
         }
-        public static void PlayInSeconds(SEName soundName,int seconds)
+        public static void PlayInSeconds(SEName soundName,double seconds)
         {
             ReadyPlaySounds.Add(new ReadyPlaySound(SEList[soundName], _gameTime.TotalGameTime, TimeSpan.FromSeconds(seconds)));
         }
@@ -68,10 +71,9 @@ namespace Sayo.Core
     }
     public enum SEName
     {
-        GameOver,
         Click,
         Opening,
-        Sayo_itai,
+        Sayo_gua,
         Sayo_hurt
     }
 }

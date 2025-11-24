@@ -9,9 +9,10 @@ namespace Sayo.Core.Object
     /// </summary>
     public class Grid
     {
-        private static readonly int _row = 20, _column = 10;
+        private const int _row = 20;
+        private const int _column = 10;
         public readonly Sprite[,] Cell = new Sprite[_row, _column];
-        private readonly int _cellWidth = 64;
+        private const int _cellWidth = 64;
         public RenderTarget2D Map;
         public Grid(int row, int column)
         {

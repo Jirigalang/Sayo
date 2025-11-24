@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Gum.Forms.Controls;
+using Gum.Forms.DefaultVisuals;
+using Gum.Wireframe;
+using System;
 
 namespace Sayo.Core
 {
@@ -16,14 +15,33 @@ namespace Sayo.Core
         public const double 下方向 = Math.PI;
         public const double 旋转270度 = Math.PI * 1.5;
         public const double 左方向 = Math.PI * 1.5;
+        public static int Score = 0;
+        public static Button CreateButton(Panel panel,EventHandler @event, string text, Anchor anchor, float width = 23, float height = 5, float textscale = 0.4f, float horizontalOffect = 0, float longitudinalOffset = 0)
+        {
+            Button button = new();
+            button.Anchor(anchor);
+            button.Text = text;
+            var visual = (ButtonVisual)button.Visual;
+            visual.Width = width;
+            visual.Height = height;
+            button.Visual.Y = longitudinalOffset;
+            button.Visual.X = horizontalOffect;
+            var textInstance = visual.TextInstance;
+            textInstance.CustomFontFile = "Fonts/SayoFont.fnt";
+            textInstance.UseCustomFont = true;
+            visual.TextInstance.FontScale = textscale;
+            button.Click += @event;
+            panel.AddChild(button);
+            return button;
+        }
     }
     public class RandomBag
     {
-        Random r = new();
+        private readonly Random r = new();
         private readonly int[] bag;
-        private int currentIndex = 0;
-        public int Current { get => currentIndex; }
-        public int Next { get => NextNumber(); }
+        public int Current { get; private set; }
+
+        public int Next => NextNumber();
 
         public RandomBag(int count)
         {
@@ -37,14 +55,11 @@ namespace Sayo.Core
 
         public int NextNumber()
         {
-            if (currentIndex >= bag.Length)
-            {
-                Shuffle();
-                currentIndex = 0;
-                return bag[currentIndex];
-            }
-            currentIndex++;
-            return bag[currentIndex];
+            Current++;
+            if (Current < bag.Length) return bag[Current];
+            Shuffle();
+            Current = 0;
+            return bag[Current];
         }
 
         private void Shuffle()
@@ -54,7 +69,7 @@ namespace Sayo.Core
                 int j = r.Next(i + 1);
                 (bag[j], bag[i]) = (bag[i], bag[j]);
             }
-            currentIndex = 0;
+            Current = 0;
         }
     }
 }

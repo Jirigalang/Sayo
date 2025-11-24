@@ -13,7 +13,7 @@ namespace Sayo.Core.Scene
         private SayoPlayer _sayo;
         private Food _food;
         private TimeSpan _moveTimer = TimeSpan.Zero;
-        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.5);
+        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(1);
         private Keys lastKey = Keys.None;
         private Keys prevKey = Keys.None;
         public static bool GameRunning = true;
@@ -32,7 +32,12 @@ namespace Sayo.Core.Scene
             var butt = Content.Load<Texture2D>("SayoButt");
             var food = Content.Load<Texture2D>("Food");
             var tile = Content.Load<Texture2D>("Tile");
+
             _grid = new Grid();
+            if (SB.IsDisposed)
+            {
+                SB = new SpriteBatch(GraphicsDevice);
+            }
             _grid.Initialize(GraphicsDeviceManager, SB, tile);
             _food = new Food(food);
             _food.Update(_grid);
@@ -46,6 +51,8 @@ namespace Sayo.Core.Scene
             _grid.Draw(SB);
             SB.End();
         }
+
+        private bool isFirstKey;
         /// <summary>
         /// 获取键盘状态,在tick时将最后一次输入传入sayo的update中
         /// </summary>
@@ -53,19 +60,18 @@ namespace Sayo.Core.Scene
         public override void Update(GameTime gameTime)
         {
             _moveTimer += gameTime.ElapsedGameTime;
-            Keys[] directions = { Keys.Up, Keys.Down, Keys.Left, Keys.Right };
+            Keys[] directions = [Keys.Up, Keys.Down, Keys.Left, Keys.Right];
 
-            KeyboardState state = Keyboard.GetState();
+            var state = Keyboard.GetState();
 
             foreach (var key in directions)
             {
-                if (state.IsKeyDown(key))
-                {
-                    if (lastKey == Keys.None)
-                        lastKey = key;
-                    else
-                        prevKey = key;
-                }
+                if (!state.IsKeyDown(key)) continue;
+                if (lastKey == Keys.None || !isFirstKey)
+                    lastKey = key;
+                else
+                    prevKey = key;
+                isFirstKey = true;
             }
 
             if (_moveTimer < _moveInterval) return;
@@ -73,11 +79,10 @@ namespace Sayo.Core.Scene
 
             _moveTimer = TimeSpan.Zero;
             if (GameRunning)
-            {
                 _sayo.Update(gameTime, lastKey, _grid);
-            }
             lastKey = prevKey;
             prevKey = Keys.None;
+            isFirstKey = false;
         }
 
         public override void Unload()
