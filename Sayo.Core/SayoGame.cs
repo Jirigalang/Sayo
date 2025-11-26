@@ -25,8 +25,8 @@ namespace Sayo.Core
             // Share _graphicsDeviceManager as a service.
             Services.AddService(typeof(GraphicsDeviceManager), _graphicsDeviceManager);
 
-            _graphicsDeviceManager.PreferredBackBufferWidth = 1280;
-            _graphicsDeviceManager.PreferredBackBufferHeight = 720;
+            _graphicsDeviceManager.PreferredBackBufferWidth = 640;
+            _graphicsDeviceManager.PreferredBackBufferHeight = 640;
             _graphicsDeviceManager.ApplyChanges();
 
             Content.RootDirectory = "Content";
@@ -83,40 +83,33 @@ namespace Sayo.Core
         protected override void Draw(GameTime gameTime)
         {
             SceneManager.CurrentScene.Draw(gameTime);
-
             base.Draw(gameTime);
         }
 
         private void InitializeGum()
         {
-            // Initialize the Gum service. The second parameter specifies
-            // the version of the default visuals to use. V2 is the latest
-            // version.
+            // 初始化 Gum 服务。第二个参数指定默认视觉版本，V2 是最新版本。
             GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
 
-            // Tell the Gum service which content manager to use.  We will tell it to
-            // use the global content manager from our Core.
+            // 告诉 Gum 服务使用哪个 ContentManager。这里使用 Core 中的全局 ContentManager。
             GumService.Default.ContentLoader!.XnaContentManager = Content;
 
-            // Register keyboard input for UI control.
+            // 注册键盘输入，用于 UI 控制。
             FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
 
-            // Register gamepad input for Ui control.
+            // 注册手柄输入，用于 UI 控制。
             FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
-
-            // Customize the tab reverse UI navigation to also trigger when the keyboard
-            // Up arrow key is pushed.
+            
+            // 自定义“反向 Tab”导航，让键盘 ↑ 也能触发。
             FrameworkElement.TabReverseKeyCombos.Add(
                 new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
 
-            // Customize the tab UI navigation to also trigger when the keyboard
-            // Down arrow key is pushed.
+            // 自定义 Tab 导航，让键盘 ↓ 也能触发。
             FrameworkElement.TabKeyCombos.Add(
                 new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Down });
 
-            // The assets created for the UI were done so at 1/4th the size to keep the size of the
-            // texture atlas small.  So we will set the default canvas size to be 1/4th the size of
-            // the game's resolution then tell gum to zoom in by a factor of 4.
+            // UI 资源是按原尺寸的 1/4 制作的，以保持图集小。
+            // 因此设置 Gum 默认画布为显示分辨率的 1/4，然后把 Gum 摄像机放大 4 倍。
             GumService.Default.CanvasWidth = GraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
             GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
             GumService.Default.Renderer.Camera.Zoom = 4.0f;

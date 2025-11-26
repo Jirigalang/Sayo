@@ -14,14 +14,16 @@ namespace Sayo.Core.Object
     /// </remarks>
     public class Grid
     {
-        private const int _row = 20;
-        private const int _column = 10;
-        public readonly Sprite[,] Cell = new Sprite[_row, _column];
+        private readonly int _row = 20;
+        private readonly int _column = 10;
+        public readonly Sprite[,] Cell;
         private const int _cellWidth = 64;
         public RenderTarget2D Map;
         public Grid(int row, int column)
         {
             Cell = new Sprite[row, column];
+            _row = row;
+            _column = column;
         }
         public Grid() { }
         public void Initialize(GraphicsDeviceManager graphicsDeviceManager, SpriteBatch sb, Texture2D tile)

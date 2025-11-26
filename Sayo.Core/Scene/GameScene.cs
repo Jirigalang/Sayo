@@ -16,7 +16,7 @@ namespace Sayo.Core.Scene
         private SayoPlayer _sayo;
         private Food _food;
         private TimeSpan _moveTimer = TimeSpan.Zero;
-        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(1);
+        private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.25);
         private Keys lastKey = Keys.None;
         private Keys prevKey = Keys.None;
         private Panel _gamePanel;
@@ -40,7 +40,7 @@ namespace Sayo.Core.Scene
             var food = Content.Load<Texture2D>("Food");
             var tile = Content.Load<Texture2D>("Tile");
 
-            _grid = new Grid();
+            _grid = new Grid(10,10);
             if (SB.IsDisposed)
             {
                 SB = new SpriteBatch(GraphicsDevice);
@@ -90,17 +90,18 @@ namespace Sayo.Core.Scene
             }
 
             _moveTimer = TimeSpan.Zero;
-            if (GameRunning)
-                _sayo.Update(gameTime, lastKey, _grid);
+            if (!GameRunning) return;
+
+            _sayo.Update(gameTime, lastKey, _grid);
+            lastKey = Keys.None;
         }
 
         public override void Unload()
         {
-            SB.Dispose();
         }
         private void CreatePanel()
         {
-            GumService.Default.Root.Children.Clear();
+            GumService.Default.Root.Children?.Clear();
             // Create a container to hold all of our buttons
             _gamePanel = new Panel();
             _gamePanel.Dock(Dock.Fill);
@@ -117,7 +118,7 @@ namespace Sayo.Core.Scene
             GameRunning = !GameRunning;
             _retryButton.IsVisible = !GameRunning;
         }
-        private void HandleRetryClicked(object sender, EventArgs e)
+        private static void HandleRetryClicked(object sender, EventArgs e)
         {
             SceneManager.ChangeScene("Game");
         }

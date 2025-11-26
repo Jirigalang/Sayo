@@ -31,7 +31,7 @@ namespace Sayo.Core.Scene
         }
         public override void Unload()
         {
-            SB.Dispose();
+
         }
         readonly string[] credits =
         [

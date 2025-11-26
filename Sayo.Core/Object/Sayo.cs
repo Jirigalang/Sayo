@@ -173,8 +173,9 @@ internal class SayoPlayer
     }
     public static void GameOver()
     {
+        bodyCount = 1;
         SoundManager.SEList[SEName.Sayo_gua].Play();
-        SoundManager.PlayInSeconds(SEName.Sayo_hurt, 2);
+        SoundManager.PlayInSeconds(SEName.Sayo_hurt, 1);
         GameScene.GameRunning = false;
         SceneManager.ChangeScene("GameOver");
     }

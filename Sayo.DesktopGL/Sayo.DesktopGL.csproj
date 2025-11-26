@@ -1,12 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>../Sayo.Core/Content/Icon.ico</ApplicationIcon>
+    <ApplicationIcon>../Sayo.Core/Content/SayoIcon.ico</ApplicationIcon>
     <AssemblyName>Sayo</AssemblyName>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
   <ItemGroup>
     <MonoGameContentReference Include="..\Sayo.Core\Content\Sayo.mgcb">
