@@ -1,0 +1,148 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:Windows
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+
+#---------------------------------- Content ---------------------------------#
+
+#begin Fonts/04b_30.fnt
+/copy:Fonts/04b_30.fnt
+
+#begin Fonts/Dymon-ShouXieTi.ttf
+/copy:Fonts/Dymon-ShouXieTi.ttf
+
+#begin Fonts/Hud.spritefont
+/importer:
+/processor:
+/build:Fonts/Hud.spritefont
+
+#begin Fonts/Roboto-Bold.ttf
+/copy:Fonts/Roboto-Bold.ttf
+
+#begin Fonts/SayoFont.fnt
+/copy:Fonts/SayoFont.fnt
+
+#begin Fonts/SayoFont_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Fonts/SayoFont_0.png
+
+#begin Fonts/mingliu.ttf
+/copy:Fonts/mingliu.ttf
+
+#begin Fonts/演示佛系体.ttf
+/copy:Fonts/演示佛系体.ttf
+
+#begin Sound/Sayo_gua.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/Sayo_gua.wav
+
+#begin Sound/Sayo_hurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/Sayo_hurt.wav
+
+#begin Sound/click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/click.wav
+
+#begin Sound/crunch1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/crunch1.wav
+
+#begin Sound/crunch2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/crunch2.wav
+
+#begin Sound/crunch3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/crunch3.wav
+
+#begin Sound/crunch4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/crunch4.wav
+
+#begin Sound/crunch5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/crunch5.wav
+
+#begin Sound/crunch6.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/crunch6.wav
+
+#begin Sound/crunch7.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/crunch7.wav
+
+#begin Sound/opening.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/build:Sound/opening.wav
+
+#begin Food.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Food.png
+
+#begin SayoBody.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoBody.png
+
+#begin SayoBody_Full.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoBody_Full.png
+
+#begin SayoBody_Turn.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoBody_Turn.png
+
+#begin SayoBody_Turn_Full.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoBody_Turn_Full.png
+
+#begin SayoButt.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoButt.png
+
+#begin SayoHead.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoHead.png
+
+#begin SayoHead_Eating.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoHead_Eating.png
+
+#begin SayoTitle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:SayoTitle.png
+
+#begin Tile.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Tile.png
+

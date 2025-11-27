@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>ab52db84-73d8-42e9-8010-e38768948af4</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SayoKNI</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Object\Food.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Object\Grid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Object\Sayo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Object\SegmentStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Object\Sprite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SayoKNIGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SceneManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\CreditsScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\GameOverScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\GameScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\MainMenuScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\SceneBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\SettingScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SoundManager.cs" />
+  </ItemGroup>
+</Project>
