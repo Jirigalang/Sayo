@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
+using SayoKNI;
 using System;
 
 namespace Sayo.Core.Scene;
@@ -17,7 +18,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
 
     public override void Load()
     {
-        _font = Content.Load<SpriteFont>("Fonts/Hud");
+        _font = TextureManager.Font;
         _windowWidth = GameGraphicsDevice.Viewport.Width;
         _windowHeight = GameGraphicsDevice.Viewport.Height;
         CreatePanel();
@@ -28,7 +29,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
         GameGraphicsDevice.Clear(Color.White);
         if (!_GameOverButtonsPanel.IsVisible) return;
         const string message = "Game Over";
-        string message2 = $"总分:{Helper.Score}";
+        string message2 = $"Score:{Helper.Score}";
         var picSize = _font.MeasureString(message);
         var picSize2 = _font.MeasureString(message2);
         var position1 = new Vector2((_windowWidth - picSize.X) / 2f, (_windowHeight - picSize.Y) / 2 - 50);
@@ -65,7 +66,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
         _GameOverButtonsPanel.AddToRoot();
 
 
-        var retryButton = Helper.CreateButton(_GameOverButtonsPanel, HandleRetryClicked, "重试", Anchor.Bottom, width: 70);
+        var retryButton = Helper.CreateButton(_GameOverButtonsPanel, HandleRetryClicked, "Try Again", Anchor.Bottom, width: 70);
 
         retryButton.IsFocused = true;
     }

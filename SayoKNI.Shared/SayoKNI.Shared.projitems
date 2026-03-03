@@ -9,9 +9,11 @@
     <Import_RootNamespace>SayoKNI</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\SayoKNI.Shared\TextureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Object\Food.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Object\Grid.cs" />
+    <Compile Include="..\SayoKNI.Shared\Object\SayoJoystick.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Object\Sayo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Object\SegmentStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Object\Sprite.cs" />

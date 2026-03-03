@@ -60,7 +60,7 @@ internal class SayoPlayer
         grid.Cell[_butt.Status.TargetPosition.X, _butt.Status.TargetPosition.Y] = _butt;
     }
     private ObjType _isAteSomething;
-    public void Update(GameTime gameTime, Keys lastKey, Grid grid)
+    public void Update(GameTime gameTime, Keys lastKey)
     {
         //先更新位置, 统一更新完后移动
         _head.Update(lastKey);
@@ -103,7 +103,7 @@ internal class SayoPlayer
 
                 try
                 {
-                    _butt.Move(grid);
+                    _butt.Move(_grid);
                 }
                 catch (Exception e)
                 {
@@ -115,8 +115,8 @@ internal class SayoPlayer
                 break;
             case ObjType.Food:
                 _head.Status.Ate = true;
-                _food.Set(grid);
-                _head.Move(grid);
+                _food.Set(_grid);
+                _head.Move(_grid);
                 _head.CurrectTexture2D = _head.Head_Eating;
                 var newBody = SayoBody.AddBody(_bodys, _butt.Status, _bodys[bodyCount - 1].OldStatus);
                 if (newBody.Status.Turn != Turn.NoTurn)
@@ -138,7 +138,7 @@ internal class SayoPlayer
                 {
                     try
                     {
-                        _bodys[i].Move(grid);
+                        _bodys[i].Move(_grid);
 
                     }
                     catch (Exception e)
@@ -146,9 +146,9 @@ internal class SayoPlayer
                         Console.WriteLine(e.Message);
                     }
                 }
-                if (grid.Cell[newBody.Status.TargetPosition.X, newBody.Status.TargetPosition.Y] == null)
+                if (_grid.Cell[newBody.Status.TargetPosition.X, newBody.Status.TargetPosition.Y] == null)
                 {
-                    grid.Cell[newBody.Status.TargetPosition.X, newBody.Status.TargetPosition.Y] = newBody;
+                    _grid.Cell[newBody.Status.TargetPosition.X, newBody.Status.TargetPosition.Y] = newBody;
                 }
                 else
                 {
@@ -187,7 +187,6 @@ internal class SayoPlayer
         SoundManager.SEList[SEName.Sayo_gua].Play();
         SoundManager.PlayInSeconds(SEName.Sayo_hurt, 1);
         GameScene.GameRunning = false;
-        SceneManager.CurrentScene.DrawToRenderTarget();
         SceneManager.ChangeScene("GameOver");
     }
 }

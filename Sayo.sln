@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36203.30
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11520.95 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SayoKNI.BlazorGL", "SayoKNI.BlazorGL\SayoKNI.BlazorGL.csproj", "{7ECF106A-6FBC-4107-8C3E-B9D06A8EF69B}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SayoKNI.Shared", "SayoKNI.Shared\SayoKNI.Shared.shproj", "{41258357-1B45-41C2-AE51-B33D37137EDF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SayoKNI.WindowsDX", "SayoKNI.WindowsDX\SayoKNI.WindowsDX.csproj", "{F28B1A02-B74F-4D96-9488-EC6041D8BBD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{E6E353BD-9C6C-48B5-8A0F-45DCF0CF451E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{F28B1A02-B74F-4D96-9488-EC6041D8BBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F28B1A02-B74F-4D96-9488-EC6041D8BBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F28B1A02-B74F-4D96-9488-EC6041D8BBD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6E353BD-9C6C-48B5-8A0F-45DCF0CF451E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6E353BD-9C6C-48B5-8A0F-45DCF0CF451E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6E353BD-9C6C-48B5-8A0F-45DCF0CF451E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6E353BD-9C6C-48B5-8A0F-45DCF0CF451E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

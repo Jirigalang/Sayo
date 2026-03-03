@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGameGum;
+using SayoKNI;
 using System;
 
 namespace Sayo.Core.Scene
@@ -27,7 +28,7 @@ namespace Sayo.Core.Scene
 
         public override void Load()
         {
-            _font = Content.Load<SpriteFont>("Fonts/Hud");
+            _font = TextureManager.Font;
             _windowWidth = GameGraphicsDevice.Viewport.Width;
             CreatePanel();
         }
@@ -105,16 +106,16 @@ namespace Sayo.Core.Scene
         readonly string[] credits =
         [
             "Design",
-            "君临德雷克",
+            "JunLinDrake",
             " ",
             "Program",
             "Jirigalang",
             " ",
             "Artist",
-            "LongBaTian(enshi tutou)",
+            "fool",
             " ",
             "Character",
-            "Sayo © 原版权方",
+            "Sayo",
             " ",
             "Powered by MonoGame",
             "Thank you for playing!"

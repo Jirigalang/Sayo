@@ -4,9 +4,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using MonoGameGum;
 using Sayo.Core.Object;
+using SayoKNI;
+using SayoKNI.Object;
 using System;
+using System.Linq;
 namespace Sayo.Core.Scene
 {
     internal class GameScene(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
@@ -21,6 +25,7 @@ namespace Sayo.Core.Scene
         private Keys prevKey = Keys.None;
         private Panel _gamePanel;
         private Button _retryButton;
+        private SayoJoystick joystick;
         public static bool GameRunning = true;
 
 
@@ -28,23 +33,24 @@ namespace Sayo.Core.Scene
         public override void Load()
         {
             GameRunning = true;
-            var head = Content.Load<Texture2D>("SayoHead");
-            var head_eatting = Content.Load<Texture2D>("SayoHead_Eating");
-            var body = Content.Load<Texture2D>("SayoBody");
-            var body_full = Content.Load<Texture2D>("SayoBody_Full");
-            var body_turn = Content.Load<Texture2D>("SayoBody_Turn");
-            var body_turn_full = Content.Load<Texture2D>("SayoBody_Turn_Full");
-            var bodys = new[] { body, body_full, body_turn, body_turn_full };
-            var heads = new[] { head, head_eatting };
-            var butt = Content.Load<Texture2D>("SayoButt");
-            var food = Content.Load<Texture2D>("Food");
-            var tile = Content.Load<Texture2D>("Tile");
-
-            _grid = new Grid(10, 10);
             if (SB.IsDisposed)
             {
                 SB = new SpriteBatch(GameGraphicsDevice);
             }
+            joystick ??= new SayoJoystick(TextureManager.JoyStick, [new Rectangle(0, 0, 128, 128), new Rectangle(128, 0, 128, 128)]);
+            var head = TextureManager.SayoHead;
+            var head_eating = TextureManager.SayoHeadEating;
+            var body = TextureManager.SayoBody;
+            var body_full = TextureManager.SayoBodyFull;
+            var body_turn = TextureManager.SayoBodyTurn;
+            var body_turn_full = TextureManager.SayoBodyTurnFull;
+            var bodys = new[] { body, body_full, body_turn, body_turn_full };
+            var heads = new[] { head, head_eating };
+            var butt = TextureManager.SayoButt;
+            var food = TextureManager.Food;
+            var tile = TextureManager.Tile;
+
+            _grid = new Grid(10, 10);
             _grid.Initialize(SB, tile, GameGraphicsDeviceManager);
             _food = new Food(food);
             _food.Update(_grid);
@@ -57,6 +63,7 @@ namespace Sayo.Core.Scene
             GameGraphicsDevice.Clear(Color.White);
             SB.Begin();
             _grid.Draw(SB);
+            joystick.Draw(SB);
             SB.End();
             GumService.Default.Draw();
         }
@@ -80,6 +87,9 @@ namespace Sayo.Core.Scene
         public override void Update(GameTime gameTime)
         {
             _grid.Update(SB);
+            var curMouse = Mouse.GetState();
+            TouchCollection touches = TouchPanel.GetState();
+            joystick.Update(gameTime, touches.FirstOrDefault(), curMouse);
             GumService.Default.Update(gameTime);
             _moveTimer += gameTime.ElapsedGameTime;
             if (!GameRunning) return;
@@ -95,7 +105,13 @@ namespace Sayo.Core.Scene
                 else
                     prevKey = key;
             }
-
+            if(joystick.Key != Keys.None)
+            {
+                if (lastKey == Keys.None)
+                    lastKey = joystick.Key;
+                else
+                    prevKey = joystick.Key;
+            }
             if (_moveTimer < _moveInterval) return;
             if (lastKey == Keys.None)
             {
@@ -106,10 +122,8 @@ namespace Sayo.Core.Scene
             _moveTimer = TimeSpan.Zero;
 
 
-            _sayo.Update(gameTime, lastKey, _grid);
+            _sayo.Update(gameTime, lastKey);
             lastKey = Keys.None;
-
-
         }
 
         public override void Unload()

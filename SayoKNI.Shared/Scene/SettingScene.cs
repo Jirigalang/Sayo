@@ -14,12 +14,10 @@ namespace Sayo.Core.Scene
         public override void Load()
         {
             CreatePanel();
-
         }
         public override void Draw(GameTime gameTime)
         {
             GameGraphicsDevice.Clear(Color.Tomato);
-
             GumService.Default.Draw();
         }
         public override void Update(GameTime gameTime)

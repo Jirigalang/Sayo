@@ -60,7 +60,7 @@ namespace SayoKNI
             base.LoadContent();
             InitializeGum();
             SceneManager.Initialize(GraphicsDevice, Content, _graphicsDeviceManager);
-            SoundManager.Initialize(Content);
+            TextureManager.Initialize(Content);
             SceneManager.ChangeScene("MainMenu");
         }
 

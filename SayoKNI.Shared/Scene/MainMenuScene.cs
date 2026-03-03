@@ -1,12 +1,11 @@
-﻿using System;
-using Gum.Forms.Controls;
-using Gum.Forms.DefaultVisuals;
+﻿using Gum.Forms.Controls;
 using Gum.Wireframe;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGameGum;
+using SayoKNI;
+using System;
 
 namespace Sayo.Core.Scene;
 
@@ -23,7 +22,7 @@ internal class MainMenuScene(
 
     public override void Load()
     {
-        title = Content.Load<Texture2D>("SayoTitle");
+        title = TextureManager.SayoTitle;
         CreateTitlePanel();
         SoundManager.SEList[SEName.Opening].Play();
     }
@@ -63,12 +62,29 @@ internal class MainMenuScene(
         _titleScreenButtonsPanel.Dock(Dock.Fill);
         _titleScreenButtonsPanel.AddToRoot();
 
-        var startButton = Helper.CreateButton(_titleScreenButtonsPanel, HandleStartClicked, "start", Anchor.Bottom, width: 70);
-        var settingButton = Helper.CreateButton(_titleScreenButtonsPanel, SettingButton_Click, "setting", Anchor.BottomRight,
-            45);
-        var creditsButton = Helper.CreateButton(_titleScreenButtonsPanel, CreditsButton_Click, "staff",
-            Anchor.BottomRight,
-            30, 5, 0.4f, 0, -22);
+        var startButton = Helper.CreateButton(
+            panel: _titleScreenButtonsPanel,
+            @event: HandleStartClicked,
+            text: "start",
+            anchor: Anchor.Bottom,
+            width: 35,
+            textscale: 0.2f);
+        var settingButton = Helper.CreateButton(
+            panel: _titleScreenButtonsPanel,
+            @event: SettingButton_Click,
+            text: "setting",
+            anchor: Anchor.BottomRight,
+            width: 22.5f,
+            textscale: 0.2f);
+        var creditsButton = Helper.CreateButton(
+            panel: _titleScreenButtonsPanel,
+            @event: CreditsButton_Click,
+            text: "staff",
+            anchor: Anchor.BottomRight,
+            width: 15,
+            textscale: 0.2f,
+            horizontalOffect: 0,
+            longitudinalOffset: -15);
 
         startButton.IsFocused = true;
     }

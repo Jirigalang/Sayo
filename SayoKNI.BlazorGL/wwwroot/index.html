@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>SayoKNI</title>
+    <title>Sayo</title>
     <base href="./" />
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
@@ -14,10 +14,16 @@
 <body>
 
     <div id="app">
-        <div id="loading" style="display: table-cell; margin: auto; width:100vw; height:100vh; vertical-align: middle; background: #ffcc10;">
+        <div id="loading" style="display: table-cell; margin: auto; width:100vw; height:100vh; vertical-align: middle; background: #ffffff;">
             <div style="display: block; margin: auto; width: 9em; color: white;font-family: 'Segoe UI', sans-serif;">
-                <div style="text-align: center; font-size: 0.85em;">Made with<br/><a href="https://github.com/kniEngine/kni"><img src="kni.png" border="0" alt="Kni"></a></div>
-                <div style="text-align: center; font-size: 1.8em;">loading&nbsp;<marquee style="width:0.9em; vertical-align: bottom;">.&nbsp;.&nbsp;.&nbsp;&nbsp;&nbsp;</marquee></div>
+                <div style="text-align: center; font-size: 0.85em; color: black;">
+                    <span id="targetText">waiting</span><br />
+                    <span id="speed">%</span><br/>
+                    <a href="https://316soramegu.wixsite.com/sayo-official">
+                        <img src="Sayo.gif" border="0" alt="Kni" style="width: 100px;">
+                    </a>
+                </div>
+                <div style="text-align: center; font-size: 1.8em; color:black;">loading&nbsp;<marquee style="width: 0.9em; vertical-align: bottom; color: black;">.&nbsp;.&nbsp;.&nbsp;&nbsp;&nbsp;</marquee></div>
             </div>
         </div>
     </div>
@@ -32,30 +38,81 @@
     <script type="module">
         import { BrotliDecode } from './js/decode.min.js';
         window.BrotliDecode = BrotliDecode;
-        // Set this to enable Brotli (.br) decompression on static webServers
-        // that don't support content compression and http://.
-        var enableBrotliDecompression = false;
+
+        var enableBrotliDecompression = true;
+        const targetText = document.getElementById('targetText');
+
         Blazor.start({
-            loadBootResource: function (type, name, defaultUri, integrity)
-            {
-                if (enableBrotliDecompression === true && type !== 'dotnetjs' && location.hostname !== 'localhost')
-                {
-                    return (async function()
-                    {
-                        const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
-                        if (!response.ok)
-                            throw new Error(response.statusText);
-                        const originalResponseBuffer = await response.arrayBuffer();
-                        const originalResponseArray = new Int8Array(originalResponseBuffer);
-                        const contentType = (type === 'dotnetwasm')
-                                          ? 'application/wasm'
-                                          : 'application/octet-stream';
-                        const decompressedResponseArray = BrotliDecode(originalResponseArray);
-                        return new Response(decompressedResponseArray,
-                                            { headers: { 'content-type': contentType }
-                                   });
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                // 1. 无论走哪种加载方式，先在界面显示当前正在加载的文件名
+                const targetText = document.getElementById('targetText');
+                targetText.innerText = `Loading: ${name}...`;
+
+                // 2. 检查是否需要走自定义的 Brotli 解压逻辑
+                // 注意：dotnetjs 必须由 Blazor 自己加载，不能拦截返回 Response
+                if (enableBrotliDecompression === true &&
+                    type !== 'dotnetjs' &&
+                    location.hostname !== 'localhost') {
+
+                    return (async function () {
+                        try {
+                            const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
+                            if (!response.ok) throw new Error(response.statusText);
+
+                            const contentLength = +response.headers.get('Content-Length');
+                            const reader = response.body.getReader();
+                            let loaded = 0;
+                            const chunks = [];
+                            let lastTime = performance.now();
+                            let lastLoaded = 0;
+                            // 读取流并更新进度
+                            while (true) {
+                                const now = performance.now();
+                                if (now - lastTime > 200) {
+                                    const deltaBytes = loaded - lastLoaded;
+                                    const deltaTime = (now - lastTime) / 1000;
+
+                                    const speed = deltaBytes / deltaTime;
+
+                                    lastTime = now;
+                                    lastLoaded = loaded;
+                                    speed.innerText = `Speed: ${formatBytes(speed)}/s`;
+                                }
+                                const { done, value } = await reader.read();
+                                if (done) break;
+                                chunks.push(value);
+                                loaded += value.length;
+
+                                if (contentLength) {
+                                    const percent = Math.round((loaded / contentLength) * 100);
+                                    targetText.innerText = `${name}: ${percent}%`;
+                                }
+                            }
+
+                            // 合并并解压
+                            const totalArray = new Uint8Array(loaded);
+                            let offset = 0;
+                            for (const chunk of chunks) {
+                                totalArray.set(chunk, offset);
+                                offset += chunk.length;
+                            }
+
+                            const decompressed = BrotliDecode(new Int8Array(totalArray.buffer));
+                            const contentType = (type === 'dotnetwasm') ? 'application/wasm' : 'application/octet-stream';
+
+                            return new Response(decompressed, {
+                                headers: { 'content-type': contentType }
+                            });
+                        } catch (e) {
+                            console.error("Brotli load failed, falling back", e);
+                            return defaultUri; // 出错时回退到默认加载
+                        }
                     })();
                 }
+
+                // 3. 如果不满足上述条件，返回 undefined（或 defaultUri），让 Blazor 默认加载
+                // 此时我们只能看到文件名切换，看不到 % 进度，因为浏览器接管了下载过程
+                return undefined;
             }
         });
     </script>
@@ -73,14 +130,12 @@
     <script src="_content/nkast.Wasm.XR/js/XR.8.0.11.js"></script>
 
     <script>
-        function tickJS()
-        {
+        function tickJS() {
             window.theInstance.invokeMethod('TickDotNet');
             window.requestAnimationFrame(tickJS);
         }
 
-        window.initRenderJS = (instance) =>
-        {
+        window.initRenderJS = (instance) => {
             window.theInstance = instance;
 
             // set initial canvas size
@@ -90,20 +145,18 @@
             canvas.height = holder.clientHeight;
             // disable context menu on right click
             canvas.addEventListener("contextmenu", e => e.preventDefault());
-            
+
             // begin game loop
             window.requestAnimationFrame(tickJS);
         };
 
-        window.addEventListener("keydown", function(event)
-        {
+        window.addEventListener("keydown", function (event) {
             // Prevent Arrows Keys and Spacebar scrolling the outer page
             // when running inside an iframe. e.g: itch.io embedding.
             if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1)
                 event.preventDefault();
         });
-        window.addEventListener("wheel", function(event)
-        {
+        window.addEventListener("wheel", function (event) {
             // Prevent Mousewheel scrolling the outer page
             // when running inside an iframe. e.g: itch.io embedding.
             event.preventDefault();
