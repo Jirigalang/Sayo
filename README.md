@@ -2,7 +2,8 @@
 # 贪吃Sayo
 
 一个主角是Sayo, 基于贪吃蛇玩法的小游戏
-框架为Monogame, 使用C#编写. 后期为了部署到浏览器, 需要移植到KNI框架下
+框架为KNI Engine, 使用C#编写
+支持Windows, Web端运行
 
 ## Todolist
 - [✔] 基础玩法实现
