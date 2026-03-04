@@ -85,8 +85,6 @@ internal class MainMenuScene(
             textscale: 0.2f,
             horizontalOffect: 0,
             longitudinalOffset: -15);
-
-        startButton.IsFocused = true;
     }
 
     private static void CreditsButton_Click(object sender, EventArgs e)

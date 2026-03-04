@@ -105,10 +105,12 @@ namespace SayoKNI.Object
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!_visible) return;
+            spriteBatch.Begin();
             spriteBatch.Draw(_texture2D, _position,
                 _rectangles[0], Color.White, 0f, new Vector2(_rectangles[0].Width / 2, _rectangles[0].Height / 2), 1f, SpriteEffects.None, 0f);
             spriteBatch.Draw(_texture2D, _position + _centerOffset,
                 _rectangles[1], Color.White, 0f, new Vector2(_rectangles[1].Width / 2, _rectangles[1].Height / 2), 1f, SpriteEffects.None, 0f);
+            spriteBatch.End();
         }
     }
 }

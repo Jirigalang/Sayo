@@ -1,28 +1,25 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Sayo.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SayoKNI;
 
 public static class TextureManager
 {
-    public static Texture2D SayoHead;
-    public static Texture2D SayoHeadEating;
-    public static Texture2D SayoBody;
-    public static Texture2D SayoBodyTurn;
-    public static Texture2D SayoBodyFull;
-    public static Texture2D SayoBodyTurnFull;
-    public static Texture2D SayoButt;
-    public static Texture2D Food;
-    public static Texture2D Tile;
-    public static Texture2D SayoTitle;
-    public static Texture2D JoyStick;
-    public static SpriteFont Font;
+    public static Texture2D SayoHead { get;private set; }
+    public static Texture2D SayoHeadEating { get; private set; }
+    public static Texture2D SayoBody { get; private set; }
+    public static Texture2D SayoBodyTurn { get; private set; }
+    public static Texture2D SayoBodyFull { get; private set; }
+    public static Texture2D SayoBodyTurnFull { get; private set; }
+    public static Texture2D SayoButt { get; private set; }
+    public static Texture2D Food { get; private set; }
+    public static Texture2D Tile { get; private set; }
+    public static Texture2D SayoTitle { get; private set; }
+    public static Texture2D JoyStick { get; private set; }
+    public static SpriteFont Font { get; private set; }
 
-    public static void Initialize(Microsoft.Xna.Framework.Content.ContentManager content)
+    public static void Initialize(ContentManager content)
     {
         SayoHead = content.Load<Texture2D>("SayoHead");
         SayoHeadEating = content.Load<Texture2D>("SayoHead_Eating");

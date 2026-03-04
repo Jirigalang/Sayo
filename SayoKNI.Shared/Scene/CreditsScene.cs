@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using MonoGameGum;
 using SayoKNI;
 using System;
@@ -28,13 +27,16 @@ namespace Sayo.Core.Scene
 
         public override void Load()
         {
-            _font = TextureManager.Font;
+            _font ??= TextureManager.Font;
             _windowWidth = GameGraphicsDevice.Viewport.Width;
             CreatePanel();
         }
 
         public override void Update(GameTime gameTime)
         {
+            _windowWidth = GameGraphicsDevice.Viewport.Width;
+            GumService.Default.CanvasWidth = GameGraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
+            GumService.Default.CanvasHeight = GameGraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
             GumService.Default.Update(gameTime);
             UpdateScrollInput();
         }
@@ -50,7 +52,15 @@ namespace Sayo.Core.Scene
                 float x = _windowWidth / 2 - _font.MeasureString(text).X / 2;
                 float y = 100 + i * 40 + _scrollOffset;
 
-                SB.DrawString(_font, text, new Vector2(x, y), Color.White);
+                SB.DrawString(spriteFont: _font,
+                              text: text,
+                              position: new Vector2(x, y),
+                              color: Color.White,
+                              rotation: 0f,
+                              origin: Vector2.Zero,
+                              scale: 1/ (float)SayoKNIGame.DRP,
+                              effects: SpriteEffects.None,
+                              layerDepth: 0f);
             }
 
             SB.End();

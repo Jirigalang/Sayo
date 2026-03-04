@@ -28,16 +28,15 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
     {
         GameGraphicsDevice.Clear(Color.White);
         if (!_GameOverButtonsPanel.IsVisible) return;
-        const string message = "Game Over";
         string message2 = $"Score:{Helper.Score}";
-        var picSize = _font.MeasureString(message);
+        var picSize = _font.MeasureString("Game Over");
         var picSize2 = _font.MeasureString(message2);
         var position1 = new Vector2((_windowWidth - picSize.X) / 2f, (_windowHeight - picSize.Y) / 2 - 50);
         var position2 = new Vector2((_windowWidth - picSize2.X) / 2f, (_windowHeight - picSize2.Y) / 2 + 50);
         var backgroundPosition = new Vector2((_windowWidth - SceneManager.BackGround.Width) / 2f, (_windowHeight - SceneManager.BackGround.Height) / 2);
         SB.Begin(samplerState: SamplerState.PointClamp);
         SB.Draw(SceneManager.BackGround, backgroundPosition, Color.White);
-        SB.DrawString(_font, message, position1, Color.Brown);
+        SB.DrawString(_font, "Game Over", position1, Color.Brown);
         SB.DrawString(_font, message2, position2, Color.Brown);
         SB.End();
         GumService.Default.Draw();
@@ -53,8 +52,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
 
     public override void Unload()
     {
-        SceneManager.BackGround?.Dispose();
-        SceneManager.BackGround = null;
+
     }
 
     private void CreatePanel()

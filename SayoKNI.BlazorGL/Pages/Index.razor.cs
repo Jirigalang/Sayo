@@ -1,35 +1,36 @@
-using System;
 using Microsoft.JSInterop;
 using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
 
 namespace SayoKNI.Pages
 {
     public partial class Index
     {
         Game _game;
-
-        protected override void OnAfterRender(bool firstRender)
+        DotNetObjectReference<Index> _objRef;
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            base.OnAfterRender(firstRender);
+            await base.OnAfterRenderAsync(firstRender);
 
             if (firstRender)
             {
-                JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
+                // init game
+                if (_game == null)
+                {
+                    float dpr = (float)await JsRuntime.InvokeAsync<double>("getDevicePixelRatio");
+                    _game = new SayoKNIGame(dpr);
+                    _objRef ??= DotNetObjectReference.Create(this);
+                    await JsRuntime.InvokeAsync<object>("initRenderJS", _objRef);
+                    _game.Run();
+                }
             }
         }
 
         [JSInvokable]
         public void TickDotNet()
         {
-            // init game
-            if (_game == null)
-            {
-                _game = new SayoKNIGame();
-                _game.Run();
-            }
-
             // run gameloop
-            _game.Tick();
+            _game?.Tick();
         }
 
     }

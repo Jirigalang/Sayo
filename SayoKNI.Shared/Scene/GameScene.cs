@@ -61,10 +61,8 @@ namespace Sayo.Core.Scene
         public override void Draw(GameTime gameTime)
         {
             GameGraphicsDevice.Clear(Color.White);
-            SB.Begin();
             _grid.Draw(SB);
             joystick.Draw(SB);
-            SB.End();
             GumService.Default.Draw();
         }
 
@@ -139,7 +137,7 @@ namespace Sayo.Core.Scene
 
 
             var pauseButton = Helper.CreateButton(_gamePanel, PauseButton_Click, "||", Anchor.BottomRight, width: 23, height: 5, textscale: 0.4f);
-            _retryButton = Helper.CreateButton(_gamePanel, HandleRetryClicked, "重试", Anchor.Bottom, width: 70);
+            _retryButton = Helper.CreateButton(_gamePanel, HandleRetryClicked, "Try Again", Anchor.Bottom, width: 70);
             _retryButton.IsVisible = false;
         }
 

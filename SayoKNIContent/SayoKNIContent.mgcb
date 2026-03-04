@@ -13,9 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/Dymon-ShouXieTi.ttf
-/copy:Fonts/Dymon-ShouXieTi.ttf
-
 #begin Fonts/Hud.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -24,16 +21,7 @@
 /build:Fonts/Hud.spritefont
 
 #begin Fonts/SayoFont_0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/SayoFont_0.png
+/copy:Fonts/SayoFont_0.png
 
 #begin Fonts/SayoFont.fnt
 /copy:Fonts/SayoFont.fnt
