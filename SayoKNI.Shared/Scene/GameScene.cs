@@ -30,6 +30,8 @@ namespace Sayo.Core.Scene
 
 
 
+        private bool _isInitialized = false;
+
         public override void Load()
         {
             GameRunning = true;
@@ -37,7 +39,28 @@ namespace Sayo.Core.Scene
             {
                 SB = new SpriteBatch(GameGraphicsDevice);
             }
-            joystick ??= new SayoJoystick(TextureManager.JoyStick, [new Rectangle(0, 0, 128, 128), new Rectangle(128, 0, 128, 128)]);
+
+            if (!_isInitialized)
+            {
+                InitializeGameObjects();
+                _isInitialized = true;
+            }
+            else
+            {
+                ResetGameState();
+            }
+
+            // 每次加载时都创建 UI（因为 Unload 时会清除）
+            CreatePanel();
+            if (_retryButton != null)
+            {
+                _retryButton.IsVisible = !GameRunning;
+            }
+        }
+
+        private void InitializeGameObjects()
+        {
+            joystick = new SayoJoystick(TextureManager.JoyStick, [new Rectangle(0, 0, 128, 128), new Rectangle(128, 0, 128, 128)]);
             var head = TextureManager.SayoHead;
             var head_eating = TextureManager.SayoHeadEating;
             var body = TextureManager.SayoBody;
@@ -55,7 +78,31 @@ namespace Sayo.Core.Scene
             _food = new Food(food);
             _food.Update(_grid);
             _sayo = new SayoPlayer(heads, bodys, butt, _grid, _food);
-            CreatePanel();
+        }
+
+        private void ResetGameState()
+        {
+            // 清空网格中的所有对象
+            for (int y = 0; y < _grid.Cell.GetLength(1); y++)
+                for (int x = 0; x < _grid.Cell.GetLength(0); x++)
+                    _grid.Cell[x, y] = null;
+
+            // 重置蛇和食物
+            _sayo.Reset(_grid, _food);
+            _food.Update(_grid);
+
+            // 将蛇的各个部分放回网格
+            _grid.Cell[_sayo.Head.Status.TargetPosition.X, _sayo.Head.Status.TargetPosition.Y] = _sayo.Head;
+            for (int i = 0; i < SayoPlayer.bodyCount; i++)
+            {
+                if (_sayo.Bodys[i] != null)
+                    _grid.Cell[_sayo.Bodys[i].Status.TargetPosition.X, _sayo.Bodys[i].Status.TargetPosition.Y] = _sayo.Bodys[i];
+            }
+            _grid.Cell[_sayo.Butt.Status.TargetPosition.X, _sayo.Butt.Status.TargetPosition.Y] = _sayo.Butt;
+
+            lastKey = Keys.None;
+            prevKey = Keys.None;
+            _moveTimer = TimeSpan.Zero;
         }
 
         public override void Draw(GameTime gameTime)
@@ -64,18 +111,6 @@ namespace Sayo.Core.Scene
             _grid.Draw(SB);
             joystick.Draw(SB);
             GumService.Default.Draw();
-        }
-
-        public override void DrawToRenderTarget()
-        {
-            RenderTarget2D backgroud = new(GameGraphicsDevice, GameGraphicsDevice.Viewport.Width, GameGraphicsDevice.Viewport.Height);
-            GameGraphicsDevice.SetRenderTarget(backgroud);
-            GameGraphicsDevice.Clear(Color.White);
-            SB.Begin();
-            _grid.Draw(SB);
-            SB.End();
-            GameGraphicsDevice.SetRenderTarget(null);
-            SceneManager.BackGround = backgroud;
         }
 
         /// <summary>
@@ -103,7 +138,7 @@ namespace Sayo.Core.Scene
                 else
                     prevKey = key;
             }
-            if(joystick.Key != Keys.None)
+            if (joystick.Key != Keys.None)
             {
                 if (lastKey == Keys.None)
                     lastKey = joystick.Key;
@@ -126,6 +161,12 @@ namespace Sayo.Core.Scene
 
         public override void Unload()
         {
+            // 只清理UI元素和事件处理器，不销毁游戏对象
+            // 游戏对象会在整个程序生命周期中保持，避免重复创建
+            if (_gamePanel != null)
+            {
+                GumService.Default.Root.Children?.Clear();
+            }
         }
         private void CreatePanel()
         {

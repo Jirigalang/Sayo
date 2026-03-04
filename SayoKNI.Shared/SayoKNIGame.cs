@@ -98,7 +98,6 @@ public class SayoKNIGame : Game
         // 初始化 Gum 服务。第二个参数指定默认视觉版本，V2 是最新版本。
         GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
 
-
         // 注册键盘输入，用于 UI 控制。
         FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
 

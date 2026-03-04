@@ -19,6 +19,11 @@ internal class SayoPlayer
     private readonly Food _food;
     public static int bodyCount = 1;
 
+    public SayoHead Head => _head;
+    public SayoBody[] Bodys => _bodys;
+    public SayoButt Butt => _butt;
+    public int Score { get; set; }
+
 
     public SayoPlayer(Texture2D[] head, Texture2D[] bodyTexture, Texture2D butt, Grid grid, Food food)
     {
@@ -188,6 +193,55 @@ internal class SayoPlayer
         SoundManager.PlayInSeconds(SEName.Sayo_hurt, 1);
         GameScene.GameRunning = false;
         SceneManager.ChangeScene("GameOver");
+    }
+
+    public void Reset(Grid grid, Food food)
+    {
+        // 重置头部到初始位置
+        _head.Status = new SegmentStatus
+        {
+            SourcePosition = new Point(SegmentStatus.InitializationPosition.X, SegmentStatus.InitializationPosition.Y),
+            TargetPosition = new Point(SegmentStatus.InitializationPosition.X + 1, SegmentStatus.InitializationPosition.Y),
+            Direction = Direction.Right,
+            Turn = Turn.NoTurn,
+            Rotation = Math.PI / 2
+        };
+        _head.OldStatus = _head.Status;
+        _head.CurrectTexture2D = _head.Head;
+
+        // 重置第一个身体到初始位置
+        SegmentStatus bodyStatus = new()
+        {
+            TargetPosition = new Point(_head.Status.SourcePosition.X, _head.Status.SourcePosition.Y),
+            SourcePosition = new Point(_head.Status.TargetPosition.X - 1, _head.Status.TargetPosition.Y),
+            Direction = Direction.Right,
+            Turn = Turn.NoTurn,
+            Rotation = Math.PI / 2
+        };
+
+        _bodys[0].Status = bodyStatus;
+        _bodys[0].OldStatus = bodyStatus;
+        _bodys[0].Status.SourcePosition.X = 1;
+        _bodys[0].CurrectTexture2D = SayoBody.BodyTexture;
+
+        // 重置屁股到初始位置
+        _butt.Status = new SegmentStatus
+        {
+            TargetPosition = new Point(_head.Status.TargetPosition.X - 2, _head.Status.TargetPosition.Y),
+            SourcePosition = new Point(_head.Status.TargetPosition.X - 3, _head.Status.TargetPosition.Y),
+            Direction = Direction.Right,
+            Turn = Turn.NoTurn,
+            Rotation = Math.PI / 2
+        };
+        _butt.OldStatus = _butt.Status;
+
+        // 清除网格中已有的身体部位（超过1个的）
+        for (int i = 1; i < bodyCount; i++)
+        {
+            _bodys[i] = null;
+        }
+        bodyCount = 1;
+        Score = 0;
     }
 }
 

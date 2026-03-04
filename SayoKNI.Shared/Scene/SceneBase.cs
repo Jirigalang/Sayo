@@ -15,6 +15,5 @@ namespace Sayo.Core.Scene
         abstract public void Update(GameTime gameTime);
         abstract public void Draw(GameTime gameTime);
         abstract public void Unload();
-        virtual public void DrawToRenderTarget(){}
     }
 }

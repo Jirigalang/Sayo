@@ -79,7 +79,7 @@ public class Grid
     RenderTarget2D screen;
     public void Draw(SpriteBatch sb)
     {
-        screen = new(_graphicsDevice, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
+        screen ??= new(_graphicsDevice, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
         _graphicsDevice.SetRenderTarget(screen);
         _graphicsDevice.Clear(Color.White);
         sb.Begin();
