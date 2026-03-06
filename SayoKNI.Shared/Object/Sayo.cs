@@ -179,7 +179,7 @@ internal class SayoPlayer
     public void GameOver()
     {
         _head.Status = _head.OldStatus;
-
+        Helper.Score = Score;
         for (int i = 0; i < bodyCount; i++)
         {
             _bodys[i].Status = _bodys[i].OldStatus;

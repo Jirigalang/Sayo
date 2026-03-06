@@ -17,8 +17,8 @@ namespace SayoKNI.Pages
                 // init game
                 if (_game == null)
                 {
-                    float dpr = (float)await JsRuntime.InvokeAsync<double>("getDevicePixelRatio");
-                    _game = new SayoKNIGame(dpr);
+                    //float dpr = (float)await JsRuntime.InvokeAsync<double>("getDevicePixelRatio");
+                    _game = new SayoKNIGame();
                     _objRef ??= DotNetObjectReference.Create(this);
                     await JsRuntime.InvokeAsync<object>("initRenderJS", _objRef);
                     _game.Run();

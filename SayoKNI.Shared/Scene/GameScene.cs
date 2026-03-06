@@ -39,6 +39,8 @@ namespace Sayo.Core.Scene
             {
                 SB = new SpriteBatch(GameGraphicsDevice);
             }
+            _grid = new Grid();
+            _grid.Initialize(SB, TextureManager.Tile, GameGraphicsDeviceManager);
 
             if (!_isInitialized)
             {
@@ -71,10 +73,8 @@ namespace Sayo.Core.Scene
             var heads = new[] { head, head_eating };
             var butt = TextureManager.SayoButt;
             var food = TextureManager.Food;
-            var tile = TextureManager.Tile;
 
-            _grid = new Grid(10, 10);
-            _grid.Initialize(SB, tile, GameGraphicsDeviceManager);
+
             _food = new Food(food);
             _food.Update(_grid);
             _sayo = new SayoPlayer(heads, bodys, butt, _grid, _food);
@@ -167,6 +167,7 @@ namespace Sayo.Core.Scene
             {
                 GumService.Default.Root.Children?.Clear();
             }
+            _grid.Unload();
         }
         private void CreatePanel()
         {

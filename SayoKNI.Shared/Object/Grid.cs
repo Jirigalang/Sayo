@@ -13,28 +13,31 @@ namespace Sayo.Core.Object;
 /// 精灵网格。它支持在特定位置设置精灵、在精灵之间移动精灵等操作
 /// 并将网格渲染到目标。网格尺寸和单元格大小是可配置的。
 /// </remarks>
-public class Grid
+public class Grid : IDisposable
 {
-    private readonly int _row = 10;
-    private readonly int _column = 10;
-    public readonly Sprite[,] Cell;
+    private int _row = 10;
+    private int _column = 10;
+    public Sprite[,] Cell;
     private const int _cellWidth = 64;
     public int CellWidth { get { return _cellWidth / (int)SayoKNIGame.DRP; } }
     private Vector2 Zero = Vector2.Zero;
     public RenderTarget2D Map;
     private static GraphicsDevice _graphicsDevice;
     private Texture2D _tile;
-    public Grid(int row, int column)
+    public Grid()
     {
-        Cell = new Sprite[row, column];
-        _row = row;
-        _column = column;
     }
-    public Grid() { }
     public void Initialize(SpriteBatch sb, Texture2D tile, GraphicsDeviceManager graphicsDeviceManager = null)
     {
         _graphicsDevice ??= graphicsDeviceManager.GraphicsDevice;
         _tile = tile;
+        int maxRow = _graphicsDevice.Viewport.Width / CellWidth;
+        int maxColumn = _graphicsDevice.Viewport.Height / CellWidth;
+        if (_row > maxRow)
+            _row = maxRow;
+        if (_column > maxColumn)
+            _column = maxColumn;
+        Cell = new Sprite[_row, _column];
         var map = new RenderTarget2D(_graphicsDevice, _row * CellWidth, _column * CellWidth);
         _graphicsDevice.SetRenderTarget(map);
         _graphicsDevice.Clear(Color.Transparent);
@@ -76,6 +79,55 @@ public class Grid
     {
         ZeroCalculate();
     }
+
+    // 资源释放状态标志
+    private bool _disposed = false;
+
+    // 实现标准的可继承释放模式，替代错误的 override Dispose()
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    public void Unload()
+    {
+        Dispose();
+    }
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed) return;
+
+        if (disposing)
+        {
+            // 释放托管资源
+            try
+            {
+                Map?.Dispose();
+            }
+            catch { /* 忽略释放时的异常以保证稳定性 */ }
+            Map = null;
+
+            try
+            {
+                screen?.Dispose();
+            }
+            catch { }
+            screen = null;
+
+            // 如果还有其它托管可释放资源，也应在此处释放
+        }
+
+        // 释放非托管资源（若有）在此添加
+
+        _disposed = true;
+    }
+
+    ~Grid()
+    {
+        Dispose(false);
+    }
+
     RenderTarget2D screen;
     public void Draw(SpriteBatch sb)
     {
@@ -117,8 +169,8 @@ public class Grid
     {
         int mapWidth = Cell.GetLength(0) * CellWidth;
         int mapHeight = Cell.GetLength(1) * CellWidth;
-        Zero = new(_graphicsDevice.Viewport.Width  / 2 - mapWidth / 2,
-                         _graphicsDevice.Viewport.Height  / 2 - mapHeight / 2);
+        Zero = new(_graphicsDevice.Viewport.Width / 2 - mapWidth / 2,
+                         _graphicsDevice.Viewport.Height / 2 - mapHeight / 2);
     }
     private static void DrawSB(SpriteBatch sb, Sprite obj, Vector2 position, float scale)
     {
