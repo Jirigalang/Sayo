@@ -65,7 +65,7 @@ internal class SayoPlayer
         grid.Cell[_butt.Status.TargetPosition.X, _butt.Status.TargetPosition.Y] = _butt;
     }
     private ObjType _isAteSomething;
-    public void Update(GameTime gameTime, Keys lastKey)
+    public Direction Update(GameTime gameTime, Keys lastKey)
     {
         //先更新位置, 统一更新完后移动
         _head.Update(lastKey);
@@ -166,6 +166,8 @@ internal class SayoPlayer
                 GameOver();
                 break;
         }
+        // 屎山就屎山吧, 不想重构了
+        return _head.Status.Direction;
     }
 
     public ObjType IsAteSomething()

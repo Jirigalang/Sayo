@@ -21,8 +21,7 @@ namespace Sayo.Core.Scene
         private Food _food;
         private TimeSpan _moveTimer = TimeSpan.Zero;
         private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.25);
-        private Keys lastKey = Keys.None;
-        private Keys prevKey = Keys.None;
+        private Direction lastDirection = Direction.Right;
         private Panel _gamePanel;
         private Button _retryButton;
         private SayoJoystick joystick;
@@ -100,8 +99,7 @@ namespace Sayo.Core.Scene
             }
             _grid.Cell[_sayo.Butt.Status.TargetPosition.X, _sayo.Butt.Status.TargetPosition.Y] = _sayo.Butt;
 
-            lastKey = Keys.None;
-            prevKey = Keys.None;
+            lastDirection = Direction.Right;
             _moveTimer = TimeSpan.Zero;
         }
 
@@ -113,8 +111,9 @@ namespace Sayo.Core.Scene
             GumService.Default.Draw();
         }
 
+        readonly Keys[] directions = [Keys.Up, Keys.Down, Keys.Left, Keys.Right];
         /// <summary>
-        /// 获取键盘状态,在tick时将最后一次输入传入sayo的update中
+        /// 获取键盘状态,在tick时或输入可以拐弯时将最后一次输入传入sayo的update中
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
@@ -126,37 +125,49 @@ namespace Sayo.Core.Scene
             GumService.Default.Update(gameTime);
             _moveTimer += gameTime.ElapsedGameTime;
             if (!GameRunning) return;
-            Keys[] directions = [Keys.Up, Keys.Down, Keys.Left, Keys.Right];
+
 
             var state = Keyboard.GetState();
-
+            Keys newKey = Keys.None;
+            // 优先考虑键盘输入，如果有多个按键同时按下，取最后一个被检测到的按键
             foreach (var key in directions)
             {
                 if (!state.IsKeyDown(key)) continue;
-                if (lastKey == Keys.None)
-                    lastKey = key;
-                else
-                    prevKey = key;
+                newKey = key;
             }
+            // 如果有摇杆输入，则覆盖键盘输入
             if (joystick.Key != Keys.None)
+                newKey = joystick.Key;
+
+
+            if (_moveTimer >= _moveInterval || newKey != Keys.None)
             {
-                if (lastKey == Keys.None)
-                    lastKey = joystick.Key;
-                else
-                    prevKey = joystick.Key;
+                if (_moveTimer >= _moveInterval)
+                {
+                    _moveTimer = TimeSpan.Zero;
+                    // lastDirection保存上一次的移动方向, 如果这次输入的方向和上一次相反或相同则丢弃输入, 否则更新lastKey并移动
+                    lastDirection = _sayo.Update(gameTime, newKey);
+                    return;
+                }
+                if (newKey != Keys.None)
+                {
+                    //按键方向相反或相同则移动不合法, 直接丢弃输入, 否则更新lastKey并移动
+                    bool reasonable = lastDirection switch
+                    {
+                        Direction.Up => newKey != Keys.Down && newKey != Keys.Up,
+                        Direction.Down => newKey != Keys.Up && newKey != Keys.Down,
+                        Direction.Left => newKey != Keys.Right && newKey != Keys.Left,
+                        Direction.Right => newKey != Keys.Left && newKey != Keys.Right,
+                        _ => false
+                    };
+                    if (reasonable)
+                    {
+                        _moveTimer = TimeSpan.Zero;
+                        lastDirection = _sayo.Update(gameTime, newKey);
+                        return;
+                    }
+                }
             }
-            if (_moveTimer < _moveInterval) return;
-            if (lastKey == Keys.None)
-            {
-                lastKey = prevKey;
-                prevKey = Keys.None;
-            }
-
-            _moveTimer = TimeSpan.Zero;
-
-
-            _sayo.Update(gameTime, lastKey);
-            lastKey = Keys.None;
         }
 
         public override void Unload()
