@@ -92,7 +92,6 @@ public class Grid : IDisposable
 
     public void Unload()
     {
-        Dispose();
     }
     protected virtual void Dispose(bool disposing)
     {

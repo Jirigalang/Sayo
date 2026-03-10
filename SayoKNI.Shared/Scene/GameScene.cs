@@ -38,6 +38,10 @@ namespace Sayo.Core.Scene
             {
                 SB = new SpriteBatch(GameGraphicsDevice);
             }
+            if (_grid != null)
+            {
+                _grid.Dispose();
+            }
             _grid = new Grid();
             _grid.Initialize(SB, TextureManager.Tile, GameGraphicsDeviceManager);
 
@@ -50,7 +54,7 @@ namespace Sayo.Core.Scene
             {
                 ResetGameState();
             }
-
+            _sayo.Grid = _grid;
             // 每次加载时都创建 UI（因为 Unload 时会清除）
             CreatePanel();
             if (_retryButton != null)
@@ -178,7 +182,6 @@ namespace Sayo.Core.Scene
             {
                 GumService.Default.Root.Children?.Clear();
             }
-            _grid.Unload();
         }
         private void CreatePanel()
         {

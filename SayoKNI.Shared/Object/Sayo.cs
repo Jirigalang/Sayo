@@ -15,13 +15,25 @@ internal class SayoPlayer
     private readonly SayoHead _head;
     private readonly SayoBody[] _bodys = new SayoBody[400];
     private readonly SayoButt _butt;
-    private readonly Grid _grid;
+    private Grid _grid;
     private readonly Food _food;
     public static int bodyCount = 1;
 
     public SayoHead Head => _head;
     public SayoBody[] Bodys => _bodys;
     public SayoButt Butt => _butt;
+    public Grid Grid
+    {
+        get
+        {
+            return _grid;
+        }
+        set
+        {
+            _grid = value; 
+        }
+    }
+
     public int Score { get; set; }
 
 
