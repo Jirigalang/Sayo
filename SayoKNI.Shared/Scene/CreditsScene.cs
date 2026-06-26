@@ -122,7 +122,7 @@ namespace Sayo.Core.Scene
             "Jirigalang",
             " ",
             "Artist",
-            "fool",
+            "foo1",
             " ",
             "Character",
             "Sayo",

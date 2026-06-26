@@ -8,6 +8,7 @@ public static class TextureManager
 {
     public static Texture2D SayoHead { get;private set; }
     public static Texture2D SayoHeadEating { get; private set; }
+    public static Texture2D SayoHeadDead { get; private set; }
     public static Texture2D SayoBody { get; private set; }
     public static Texture2D SayoBodyTurn { get; private set; }
     public static Texture2D SayoBodyFull { get; private set; }
@@ -28,6 +29,7 @@ public static class TextureManager
         SayoBodyFull = content.Load<Texture2D>("SayoBody_Full");
         SayoBodyTurnFull = content.Load<Texture2D>("SayoBody_Turn_Full");
         SayoButt = content.Load<Texture2D>("SayoButt");
+        SayoHeadDead = content.Load<Texture2D>("SayoHead_Dead");
         Food = content.Load<Texture2D>("Food");
         Tile = content.Load<Texture2D>("Tile");
         SayoTitle = content.Load<Texture2D>("SayoTitle");

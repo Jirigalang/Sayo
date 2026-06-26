@@ -11,6 +11,7 @@ using SayoKNI;
 using SayoKNI.Object;
 using System;
 using System.Linq;
+using Grid = Sayo.Core.Object.Grid;
 namespace Sayo.Core.Scene
 {
     internal class GameScene(GraphicsDevice graphicsDevice, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
@@ -68,12 +69,13 @@ namespace Sayo.Core.Scene
             joystick = new SayoJoystick(TextureManager.JoyStick, [new Rectangle(0, 0, 128, 128), new Rectangle(128, 0, 128, 128)]);
             var head = TextureManager.SayoHead;
             var head_eating = TextureManager.SayoHeadEating;
+            var head_dead = TextureManager.SayoHeadDead;
             var body = TextureManager.SayoBody;
             var body_full = TextureManager.SayoBodyFull;
             var body_turn = TextureManager.SayoBodyTurn;
             var body_turn_full = TextureManager.SayoBodyTurnFull;
-            var bodys = new[] { body, body_full, body_turn, body_turn_full };
-            var heads = new[] { head, head_eating };
+            Texture2D[] bodys = [body, body_full, body_turn, body_turn_full];
+            Texture2D[] heads = [head, head_eating, head_dead];
             var butt = TextureManager.SayoButt;
             var food = TextureManager.Food;
 

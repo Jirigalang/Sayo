@@ -173,6 +173,10 @@ public class Grid : IDisposable
     }
     private static void DrawSB(SpriteBatch sb, Sprite obj, Vector2 position, float scale)
     {
+        if(obj.CurrectTexture2D.Width == 512)
+        {
+            scale /= 8f;
+        }
         sb.Draw(obj.CurrectTexture2D,
                 position,
                 null,

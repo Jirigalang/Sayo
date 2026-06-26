@@ -41,7 +41,7 @@ internal class SayoPlayer
     {
         Score = 0;
         _grid = grid;
-        _head = new SayoHead(head[0], head[1]);
+        _head = new SayoHead(head[0], head[1], head[2]);
         _food = food;
         SayoBody.BodyTexture = bodyTexture[0];
         SayoBody.FullBody = bodyTexture[1];
@@ -193,6 +193,7 @@ internal class SayoPlayer
     public void GameOver()
     {
         _head.Status = _head.OldStatus;
+        _head.CurrectTexture2D = _head.Head_Dead;
         Helper.Score = Score;
         for (int i = 0; i < bodyCount; i++)
         {
@@ -266,12 +267,14 @@ internal class SayoHead : Sprite
 {
     public Texture2D Head_Eating;
     public Texture2D Head;
+    public Texture2D Head_Dead;
 
-    public SayoHead(Texture2D head, Texture2D head_Eating) : base(head)
+    public SayoHead(Texture2D head, Texture2D head_Eating, Texture2D head_Dead) : base(head)
     {
         ObjType = ObjType.Body;
         Head = head;
         Head_Eating = head_Eating;
+        Head_Dead = head_Dead;
     }
 
     public void Update(Keys lastKey)
