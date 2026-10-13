@@ -24,7 +24,6 @@ internal class MainMenuScene(
     {
         title = TextureManager.SayoTitle;
         CreateTitlePanel();
-        SoundManager.SEList[SEName.Opening].Play();
     }
 
     public override void Draw(GameTime gameTime)
@@ -39,15 +38,14 @@ internal class MainMenuScene(
             SB.Draw(title, position, Color.White);
             SB.End();
         }
-
-        GumService.Default.Draw();
+        Gum.GumService.Default.Draw();
     }
 
     public override void Update(GameTime gameTime)
     {
         _windowWidth = GameGraphicsDevice.Viewport.Width;
         _windowHeight = GameGraphicsDevice.Viewport.Height;
-        GumService.Default.Update(gameTime);
+        Gum.GumService.Default.Update(gameTime);
     }
 
     public override void Unload()
@@ -56,7 +54,7 @@ internal class MainMenuScene(
 
     private void CreateTitlePanel()
     {
-        GumService.Default.Root.Children?.Clear();
+        Gum.GumService.Default.Root.Children?.Clear();
         // Create a container to hold all of our buttons
         _titleScreenButtonsPanel = new Panel();
         _titleScreenButtonsPanel.Dock(Dock.Fill);

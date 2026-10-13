@@ -9,6 +9,9 @@
     <Import_RootNamespace>SayoKNI</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ImGuiDebugManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Library\ImGui\DrawVertDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Library\ImGui\ImGuiRenderer.cs" />
     <Compile Include="..\SayoKNI.Shared\TextureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Object\Food.cs" />

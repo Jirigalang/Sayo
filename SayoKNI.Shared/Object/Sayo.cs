@@ -93,16 +93,18 @@ internal class SayoPlayer
         _isAteSomething = IsAteSomething();
         switch (_isAteSomething)
         {
-            case ObjType.Air:
+            case ObjType.Butt:
                 _head.Status.Ate = false;
                 _head.CurrectTexture2D = _head.Head;
+                var tempStatus = _head.Status;
                 try
                 {
-                    _head.Move(_grid);
+                    _head.MoveIfTargetPositionIsButt(_grid);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+                    MessageBox.Show("error", e.ToString(), ["OK"]);
                 }
 
                 for (int i = 0; i < bodyCount; i++)
@@ -115,6 +117,46 @@ internal class SayoPlayer
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
+                        MessageBox.Show("error", e.ToString(), ["OK"]);
+                    }
+                }
+
+                try
+                {
+                    _butt.Move(_grid);
+                    _head.Move(_grid);
+                    _head.Status = tempStatus;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    MessageBox.Show("error", e.ToString(), ["OK"]);
+                }
+                break;
+            case ObjType.Air:
+                _head.Status.Ate = false;
+                _head.CurrectTexture2D = _head.Head;
+                try
+                {
+                    _head.Move(_grid);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    MessageBox.Show("error", e.ToString(), ["OK"]);
+                }
+
+                for (int i = 0; i < bodyCount; i++)
+                {
+                    try
+                    {
+                        _bodys[i].Move(_grid);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        MessageBox.Show("error", e.ToString(), ["OK"]);
                     }
                 }
 
@@ -125,9 +167,11 @@ internal class SayoPlayer
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+                    MessageBox.Show("error", e.ToString(), ["OK"]);
                 }
                 break;
             case ObjType.Body:
+            case ObjType.Edge:
                 GameOver();
                 break;
             case ObjType.Food:
@@ -161,6 +205,7 @@ internal class SayoPlayer
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
+                        MessageBox.Show("error", e.ToString(), ["OK"]);
                     }
                 }
                 if (_grid.Cell[newBody.Status.TargetPosition.X, newBody.Status.TargetPosition.Y] == null)
@@ -173,9 +218,6 @@ internal class SayoPlayer
                 }
                 SoundManager.PlayEatSounds();
                 Score++;
-                break;
-            case ObjType.Edge:
-                GameOver();
                 break;
         }
         // 屎山就屎山吧, 不想重构了
@@ -328,6 +370,23 @@ internal class SayoHead : Sprite
         Status.SourcePosition = Status.TargetPosition;
         Status.TargetPosition += move;
     }
+    public void MoveIfTargetPositionIsButt(Grid grid)
+    {
+        SegmentStatus segmentStatus = Status;
+        Status.TargetPosition = new(114,514);
+        try
+        {
+            Move(grid);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            MessageBox.Show("error", e.ToString(), ["OK"]);
+        }
+        segmentStatus.SourcePosition.X = Status.TargetPosition.X;
+        segmentStatus.SourcePosition.Y = Status.TargetPosition.Y;
+        Status = segmentStatus;
+    }
 }
 
 /// <summary>
@@ -404,7 +463,7 @@ internal class SayoButt : Sprite
 {
     public SayoButt(Texture2D texture2D) : base(texture2D)
     {
-        ObjType = ObjType.Body;
+        ObjType = ObjType.Butt;
     }
 
 

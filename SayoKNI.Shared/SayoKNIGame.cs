@@ -1,8 +1,9 @@
 ﻿using Gum.Forms;
 using Gum.Forms.Controls;
+using ImGuiNET;
+using ImGuiNET.SampleProgram.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameGum;
 using Sayo.Core;
 using System;
 
@@ -14,17 +15,18 @@ namespace SayoKNI;
 public class SayoKNIGame : Game
 {
     private readonly GraphicsDeviceManager _graphicsDeviceManager;
-    public static float DRP = 1.0f;
+    public static float DRP { get; set; } = 1.0f;
+    public static ImGuiRenderer ImGuiRenderer { get; private set; }
 
     public SayoKNIGame(double drp = 1f)
     {
         _graphicsDeviceManager = new GraphicsDeviceManager(this);
         // Share _graphicsDeviceManager as a service.
-        Services.AddService(typeof(GraphicsDeviceManager), _graphicsDeviceManager);
+        Services.AddService(_graphicsDeviceManager);
         Content.RootDirectory = "Content";
         _graphicsDeviceManager.GraphicsProfile = GraphicsProfile.FL10_0;
-        _graphicsDeviceManager.PreferredBackBufferWidth = 640;
-        _graphicsDeviceManager.PreferredBackBufferHeight = 640;
+        _graphicsDeviceManager.PreferredBackBufferWidth = 960;
+        _graphicsDeviceManager.PreferredBackBufferHeight = 960;
         IsMouseVisible = true;
         _graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         DRP = (float)drp;
@@ -40,14 +42,17 @@ public class SayoKNIGame : Game
     {
         Window.ClientSizeChanged += OnClientSizeChanged;
         Window.AllowUserResizing = true;
+        // 创建 ImGui 渲染器。
+        ImGuiRenderer = new ImGuiRenderer(this);
+        ImGuiRenderer.RebuildFontAtlas();
         base.Initialize();
 
     }
 
     private void OnClientSizeChanged(object sender, EventArgs e)
     {
-        GumService.Default.CanvasWidth = GraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
-        GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
+        Gum.GumService.Default.CanvasWidth = GraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
+        Gum.GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
     }
 
     /// <summary>
@@ -79,6 +84,30 @@ public class SayoKNIGame : Game
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Update(GameTime gameTime)
     {
+#if DEBUG
+        // 注册游戏场景和时间信息到Debug管理器
+        if (SceneManager.CurrentScene is Sayo.Core.Scene.GameScene gameScene)
+        {
+            ImGuiDebugManager.Instance.RegisterGameScene(gameScene);
+            ImGuiDebugManager.Instance.RegisterGameTime(gameTime);
+        }
+
+        // 按F1切换调试面板
+        var keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+        if (keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1))
+        {
+            if (!_lastFrameF1Pressed)
+            {
+                ImGuiDebugManager.Instance.ToggleVisibility();
+                _lastFrameF1Pressed = true;
+            }
+        }
+        else
+        {
+            _lastFrameF1Pressed = false;
+        }
+#endif
+
         SceneManager.CurrentScene.Update(gameTime);
         SoundManager.Update(gameTime);
         base.Update(gameTime);
@@ -91,32 +120,42 @@ public class SayoKNIGame : Game
     protected override void Draw(GameTime gameTime)
     {
         SceneManager.CurrentScene.Draw(gameTime);
+        ImGuiRenderer.BeforeLayout(gameTime);
+
+#if DEBUG
+        ImGuiDebugManager.Instance.Render();
+#endif
+
+        // 在此结束调试 UI 的绘制
+        ImGuiRenderer.AfterLayout();
         base.Draw(gameTime);
     }
+
+    private bool _lastFrameF1Pressed = false;
     private void InitializeGum()
     {
-        // 初始化 Gum 服务。第二个参数指定默认视觉版本，V2 是最新版本。
-        GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
+        // 初始化 Gum 服务。第二个参数指定默认视觉版本，V3 是最新版本。
+        Gum.GumService.Default.Initialize(this, DefaultVisualsVersion.V3);
 
         // 注册键盘输入，用于 UI 控制。
-        FrameworkElement.KeyboardsForUiControl.Add(GumService.Default.Keyboard);
+        FrameworkElement.KeyboardsForUiControl.Add(Gum.GumService.Default.Keyboard);
 
         // 注册手柄输入，用于 UI 控制。
-        FrameworkElement.GamePadsForUiControl.AddRange(GumService.Default.Gamepads);
+        FrameworkElement.GamePadsForUiControl.AddRange(Gum.GumService.Default.Gamepads);
 
         // 自定义“反向 Tab”导航，让键盘 ↑ 也能触发。
         FrameworkElement.TabReverseKeyCombos.Add(
-            new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Up });
+            new KeyCombo() { PushedKey = Gum.Forms.Input.Keys.Up });
 
         // 自定义 Tab 导航，让键盘 ↓ 也能触发。
         FrameworkElement.TabKeyCombos.Add(
-            new KeyCombo() { PushedKey = Microsoft.Xna.Framework.Input.Keys.Down });
+            new KeyCombo() { PushedKey = Gum.Forms.Input.Keys.Down });
 
         // UI 资源是按原尺寸的 1/4 制作的，以保持图集小。
         // 因此设置 Gum 默认画布为显示分辨率的 1/4，然后把 Gum 摄像机放大 4 倍。
-        GumService.Default.CanvasWidth = GraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
-        GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
-        GumService.Default.Renderer.Camera.Zoom = 4.0f;
+        Gum.GumService.Default.CanvasWidth = GraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
+        Gum.GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
+        Gum.GumService.Default.Renderer.Camera.Zoom = 4.0f;
     }
 }
 

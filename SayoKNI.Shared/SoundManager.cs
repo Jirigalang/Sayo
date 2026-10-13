@@ -17,7 +17,6 @@ namespace Sayo.Core
         public static void Initialize(ContentManager content)
         {
             SEList[SEName.Click] = content.Load<SoundEffect>(@"Sound\click").CreateInstance();
-            SEList[SEName.Opening] = content.Load<SoundEffect>(@"Sound\opening").CreateInstance();
             SEList[SEName.Sayo_gua] = content.Load<SoundEffect>(@"Sound\Sayo_gua").CreateInstance();
             SEList[SEName.Sayo_hurt] = content.Load<SoundEffect>(@"Sound\Sayo_hurt").CreateInstance();
             for(int i = 0; i < 7; i++)
@@ -72,7 +71,6 @@ namespace Sayo.Core
     public enum SEName
     {
         Click,
-        Opening,
         Sayo_gua,
         Sayo_hurt
     }

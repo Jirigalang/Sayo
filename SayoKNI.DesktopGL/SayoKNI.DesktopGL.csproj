@@ -27,9 +27,11 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Gum.KNI" Version="2026.5.8.1" />
+    <PackageReference Include="Gum.KNI" Version="2026.7.22.1" />
+    <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
     <PackageReference Include="nkast.Xna.Framework" Version="4.2.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content" Version="4.2.9001" />
     <PackageReference Include="nkast.Xna.Framework.Game" Version="4.2.9001" />

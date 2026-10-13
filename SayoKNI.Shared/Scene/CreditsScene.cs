@@ -35,9 +35,9 @@ namespace Sayo.Core.Scene
         public override void Update(GameTime gameTime)
         {
             _windowWidth = GameGraphicsDevice.Viewport.Width;
-            GumService.Default.CanvasWidth = GameGraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
-            GumService.Default.CanvasHeight = GameGraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
-            GumService.Default.Update(gameTime);
+            Gum.GumService.Default.CanvasWidth = GameGraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
+            Gum.GumService.Default.CanvasHeight = GameGraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
+            Gum.GumService.Default.Update(gameTime);
             UpdateScrollInput();
         }
 
@@ -64,7 +64,7 @@ namespace Sayo.Core.Scene
             }
 
             SB.End();
-            GumService.Default.Draw();
+            Gum.GumService.Default.Draw();
         }
 
         public override void Unload()
@@ -98,7 +98,7 @@ namespace Sayo.Core.Scene
         }
         private void CreatePanel()
         {
-            GumService.Default.Root.Children?.Clear();
+            Gum.GumService.Default.Root.Children?.Clear();
             // Create a container to hold all of our buttons
             _gamePanel = new Panel();
             _gamePanel.Dock(Dock.Fill);

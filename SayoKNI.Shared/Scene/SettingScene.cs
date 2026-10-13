@@ -3,7 +3,6 @@ using Gum.Wireframe;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameGum;
 using SayoKNI;
 using System;
 namespace Sayo.Core.Scene
@@ -33,23 +32,23 @@ namespace Sayo.Core.Scene
             SB.DrawString(_font, _windowWidth.ToString(), new Vector2(_windowWidthx, middleY - 100), Color.White);
             SB.DrawString(_font, _windowHeight.ToString(), new Vector2(_windowHeightx, middleY + 100), Color.White);
             SB.End();
-            GumService.Default.Draw();
+            Gum.GumService.Default.Draw();
         }
         public override void Update(GameTime gameTime)
         {
             _windowWidth = GameGraphicsDevice.Viewport.Width;
             _windowHeight = GameGraphicsDevice.Viewport.Height;
             _windowWidth = GameGraphicsDevice.Viewport.Width;
-            GumService.Default.CanvasWidth = GameGraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
-            GumService.Default.CanvasHeight = GameGraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
-            GumService.Default.Update(gameTime);
+            Gum.GumService.Default.CanvasWidth = GameGraphicsDevice.PresentationParameters.BackBufferWidth / 4.0f;
+            Gum.GumService.Default.CanvasHeight = GameGraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
+            Gum.GumService.Default.Update(gameTime);
         }
         public override void Unload()
         {
         }
         private void CreatePanel()
         {
-            GumService.Default.Root.Children?.Clear();
+            Gum.GumService.Default.Root.Children?.Clear();
             // Create a container to hold all of our buttons
             _gamePanel = new Panel();
             _gamePanel.Dock(Dock.Fill);

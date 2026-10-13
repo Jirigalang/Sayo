@@ -18,12 +18,13 @@ public class Grid : IDisposable
     private int _row = 10;
     private int _column = 10;
     public Sprite[,] Cell;
-    private const int _cellWidth = 64;
-    public int CellWidth { get { return _cellWidth / (int)SayoKNIGame.DRP; } }
+    private const int _cellWidth = 128;
+    public static int CellWidth { get { return _cellWidth / (int)SayoKNIGame.DRP; } }
     private Vector2 Zero = Vector2.Zero;
     public RenderTarget2D Map;
     private static GraphicsDevice _graphicsDevice;
     private Texture2D _tile;
+    private Sprite _buffer;
     public Grid()
     {
     }
@@ -58,12 +59,18 @@ public class Grid : IDisposable
     }
     public void Move(Point sourecPosition, Point targetPosition)
     {
-        if (sourecPosition == targetPosition)
-            throw new Exception("源位置与目标位置相同, 无需移动");
-        if (Cell[sourecPosition.X, sourecPosition.Y] is null)
-            throw new Exception("源位置无对象, 无法移动");
-        if (Cell[targetPosition.X, targetPosition.Y] is not null)
-            throw new Exception("目标位置已有对象, 无法移动");
+        if (targetPosition == new Point(114, 514))
+        {
+            _buffer = Cell[sourecPosition.X, sourecPosition.Y];
+            Cell[sourecPosition.X, sourecPosition.Y] = null;
+            return;
+        }
+        if (sourecPosition == new Point(114, 514))
+        {
+            Cell[targetPosition.X, targetPosition.Y] = _buffer;
+            _buffer = null;
+            return;
+        }
         Cell[targetPosition.X, targetPosition.Y] = Cell[sourecPosition.X, sourecPosition.Y];
         Cell[sourecPosition.X, sourecPosition.Y] = null;
     }
@@ -128,7 +135,7 @@ public class Grid : IDisposable
     }
 
     RenderTarget2D screen;
-    public void Draw(SpriteBatch sb)
+    public void Draw(SpriteBatch sb, Effect effect = null)
     {
         screen ??= new(_graphicsDevice, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
         _graphicsDevice.SetRenderTarget(screen);
@@ -150,7 +157,8 @@ public class Grid : IDisposable
             }
         sb.End();
         _graphicsDevice.SetRenderTarget(null);
-        sb.Begin();
+        // 只在最终屏幕纹理上应用效果，网格内部绘制仍使用默认采样与混合状态。
+        sb.Begin(effect: effect);
         sb.Draw(texture: screen,
                 position: Vector2.Zero,
                 sourceRectangle: null,
@@ -173,10 +181,7 @@ public class Grid : IDisposable
     }
     private static void DrawSB(SpriteBatch sb, Sprite obj, Vector2 position, float scale)
     {
-        if(obj.CurrectTexture2D.Width == 512)
-        {
-            scale /= 8f;
-        }
+        scale /= obj.CurrectTexture2D.Width/128f;
         sb.Draw(obj.CurrectTexture2D,
                 position,
                 null,

@@ -1,11 +1,11 @@
 ﻿using Gum.Forms.Controls;
 using Gum.Wireframe;
+using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using MonoGameGum;
 using Sayo.Core.Object;
 using SayoKNI;
 using SayoKNI.Object;
@@ -20,6 +20,7 @@ namespace Sayo.Core.Scene
         private Grid _grid;
         private SayoPlayer _sayo;
         private Food _food;
+        // 保存场景光照效果；具体光源参数会根据当前窗口尺寸动态设置。
         private TimeSpan _moveTimer = TimeSpan.Zero;
         private readonly TimeSpan _moveInterval = TimeSpan.FromSeconds(0.25);
         private Direction lastDirection = Direction.Right;
@@ -29,20 +30,25 @@ namespace Sayo.Core.Scene
         public static bool GameRunning = true;
 
 
-
         private bool _isInitialized = false;
+
+        // Debug properties
+        public Grid Grid => _grid;
+        public SayoPlayer Sayo => _sayo;
+        public Food Food => _food;
+        public TimeSpan MoveTimer => _moveTimer;
+        public Direction LastDirection => lastDirection;
 
         public override void Load()
         {
             GameRunning = true;
+            // Effect 由 ContentManager 缓存管理，重复进入游戏场景时无需手动释放。
             if (SB.IsDisposed)
             {
                 SB = new SpriteBatch(GameGraphicsDevice);
             }
-            if (_grid != null)
-            {
-                _grid.Dispose();
-            }
+            _grid?.Dispose();
+
             _grid = new Grid();
             _grid.Initialize(SB, TextureManager.Tile, GameGraphicsDeviceManager);
 
@@ -114,10 +120,8 @@ namespace Sayo.Core.Scene
             GameGraphicsDevice.Clear(Color.White);
             _grid.Draw(SB);
             joystick.Draw(SB);
-            GumService.Default.Draw();
+            Gum.GumService.Default.Draw();
         }
-
-        readonly Keys[] directions = [Keys.Up, Keys.Down, Keys.Left, Keys.Right];
         /// <summary>
         /// 获取键盘状态,在tick时或输入可以拐弯时将最后一次输入传入sayo的update中
         /// </summary>
@@ -128,7 +132,7 @@ namespace Sayo.Core.Scene
             var curMouse = Mouse.GetState();
             TouchCollection touches = TouchPanel.GetState();
             joystick.Update(gameTime, touches.FirstOrDefault(), curMouse);
-            GumService.Default.Update(gameTime);
+            Gum.GumService.Default.Update(gameTime);
             _moveTimer += gameTime.ElapsedGameTime;
             if (!GameRunning) return;
 
@@ -136,12 +140,12 @@ namespace Sayo.Core.Scene
             var state = Keyboard.GetState();
             Keys newKey = Keys.None;
             // 优先考虑键盘输入，如果有多个按键同时按下，取最后一个被检测到的按键
-            foreach (var key in directions)
+            foreach (var key in (Keys[])[Keys.Up, Keys.Down, Keys.Left, Keys.Right])
             {
                 if (!state.IsKeyDown(key)) continue;
                 newKey = key;
             }
-            // 如果有摇杆输入，则覆盖键盘输入
+            // 如果有虚拟摇杆输入，则覆盖键盘输入
             if (joystick.Key != Keys.None)
                 newKey = joystick.Key;
 
@@ -182,12 +186,12 @@ namespace Sayo.Core.Scene
             // 游戏对象会在整个程序生命周期中保持，避免重复创建
             if (_gamePanel != null)
             {
-                GumService.Default.Root.Children?.Clear();
+                Gum.GumService.Default.Root.Children?.Clear();
             }
         }
         private void CreatePanel()
         {
-            GumService.Default.Root.Children?.Clear();
+            Gum.GumService.Default.Root.Children?.Clear();
             // Create a container to hold all of our buttons
             _gamePanel = new Panel();
             _gamePanel.Dock(Dock.Fill);

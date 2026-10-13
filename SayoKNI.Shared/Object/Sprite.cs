@@ -13,7 +13,7 @@ public abstract class Sprite(Texture2D texture)
     ///     移动到新位置后, 将新位置赋值给旧位置
     /// </summary>
     /// <param name="grid"></param>
-    public void Move(Grid grid)
+    public virtual void Move(Grid grid)
     {
         grid.Move(Status.SourcePosition, Status.TargetPosition);
     }
@@ -47,5 +47,6 @@ public enum ObjType
     Air,
     Body,
     Food,
-    Edge
+    Edge,
+    Butt
 }

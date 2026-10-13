@@ -50,6 +50,18 @@
 /processorParam:TextureFormat=Color
 /build:SayoBody_Full.png
 
+#begin SayoBody_Full1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SayoBody_Full1.png
+
 #begin SayoBody_Turn_Full.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -61,6 +73,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SayoBody_Turn_Full.png
+
+#begin SayoBody_Turn_Full1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SayoBody_Turn_Full1.png
 
 #begin SayoBody_Turn.png
 /importer:TextureImporter
@@ -74,6 +98,18 @@
 /processorParam:TextureFormat=Color
 /build:SayoBody_Turn.png
 
+#begin SayoBody_Turn1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SayoBody_Turn1.png
+
 #begin SayoBody.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -86,6 +122,18 @@
 /processorParam:TextureFormat=Color
 /build:SayoBody.png
 
+#begin SayoBody1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SayoBody1.png
+
 #begin SayoButt.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -97,6 +145,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SayoButt.png
+
+#begin SayoHead_Dead.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SayoHead_Dead.png
 
 #begin SayoHead_Eating.png
 /importer:TextureImporter
@@ -224,3 +284,7 @@
 /processorParam:TextureFormat=Color
 /build:Tile.png
 
+#begin Effects/CornerLight.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/build:Effects/CornerLight.fx

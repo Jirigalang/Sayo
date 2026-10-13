@@ -39,7 +39,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
         SB.DrawString(_font, "Game Over", position1, Color.Brown);
         SB.DrawString(_font, message2, position2, Color.Brown);
         SB.End();
-        GumService.Default.Draw();
+        Gum.GumService.Default.Draw();
     }
 
 
@@ -47,7 +47,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
     {
         _windowWidth = GameGraphicsDevice.Viewport.Width;
         _windowHeight = GameGraphicsDevice.Viewport.Height;
-        GumService.Default.Update(gameTime);
+        Gum.GumService.Default.Update(gameTime);
     }
 
     public override void Unload()
@@ -57,7 +57,7 @@ internal class GameOverScene(GraphicsDevice graphicsDevice, ContentManager conte
 
     private void CreatePanel()
     {
-        GumService.Default.Root.Children?.Clear();
+        Gum.GumService.Default.Root.Children?.Clear();
         // Create a container to hold all of our buttons
         _GameOverButtonsPanel = new Panel();
         _GameOverButtonsPanel.Dock(Dock.Fill);
